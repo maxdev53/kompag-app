@@ -1,6 +1,10 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_flexible_toast/flutter_flexible_toast.dart';
 import 'package:flutter_login_register_ui/main.dart';
 import 'package:flutter_login_register_ui/screens/register_akun.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
@@ -121,16 +125,48 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  Future<dynamic> registerMemberAkun(String name, String memberId) async {
+    var url = Uri.parse(
+        'https://apikompag.maxproitsolution.com/api/anggota/registrasi/pertama');
+
+    var response = await http.post(url, body: {
+      'member_id': memberId,
+      'no_hp': noHpRegisterController.text,
+    });
+    // String _namaPendaftar = namaRegisterController.text == null
+    //     ? name
+    //     : namaRegisterController.text;
+
+    var statusCode = response.statusCode;
+
+    return statusCode;
+  }
+
   Future<dynamic> registerMember() async {
     var url = Uri.parse(
         'https://apikompag.maxproitsolution.com/api/anggota/self-store-member');
     // String token = await storage.read(key: 'token');
+    var phone3 = noHpRegisterController.text;
+    var phone2 = phone3.substring(0, 2);
+    var phone0 = phone3.substring(0, 1);
+    var phone1 = phone3.substring(1);
+    var phone;
+    if (phone2 == '62') {
+      phone = phone3;
+    } else {
+      if (phone0 == '0') {
+        phone = '62' + phone1;
+      } else {
+        phone = '62' + phone3;
+      }
+    }
+    // print(emailRegisterController.text);
     var response = await http.post(
       url,
       body: {
         'name': namaRegisterController.text,
         'email': emailRegisterController.text,
-        'no_hp': noHpRegisterController.text,
+        'simcard_contact': phone,
       },
       // headers: {
       //   'Content-Type' : 'application/json',
@@ -138,90 +174,114 @@ class _RegisterPageState extends State<RegisterPage> {
       // }
     );
 
-    print(response.body);
-    // String _namaPendaftar = namaRegisterController.text == null
-    // ? 'user'
-    //     : namaRegisterController.text;
-    // FlutterOpenWhatsapp.sendSingleMessage("628111755827",
-    //     "Salam sejahtera  %0a Saya telah mengajukan pembuatan akun%0a atas nama $_namaPendaftar  %0a terimakasih");
-
     var statusCode = response.statusCode;
+    // print(statusCode);
+    // print(response.body);
+    String idMember;
+    if (statusCode == 200) {
+      var body = json.decode(response.body);
+      idMember = body['data_member']['id_org_member'];
+    }
 
     switch (statusCode) {
       case 400:
-        CoolAlert.show(
-            title: "Data tidak lengkap",
-            context: context,
-            type: CoolAlertType.error,
-            text: "Harap isi nomer HP");
+        FlutterFlexibleToast.showToast(
+            message: 'Kesalahan pengisian data atau data sudah ada',
+            toastLength: Toast.LENGTH_LONG,
+            toastGravity: ToastGravity.TOP,
+            icon: ICON.ERROR,
+            radius: 40,
+            elevation: 10,
+            imageSize: 12,
+            textColor: Colors.white,
+            backgroundColor: Colors.redAccent,
+            timeInSeconds: 1);
         break;
-      case 406:
-        CoolAlert.show(
-            title: "Kesalahan",
-            context: context,
-            type: CoolAlertType.error,
-            text: "Nomer HP sudah terdaftar");
-        break;
+      //   case 406:
+      //     CoolAlert.show(
+      //         title: "Kesalahan",
+      //         context: context,
+      //         type: CoolAlertType.error,
+      //         text: "Nomer HP sudah terdaftar");
+      //     break;
       case 200:
-        CoolAlert.show(
-          context: context,
-          type: CoolAlertType.success,
-          text: "Pendaftaran berhasil",
-          onConfirmBtnTap: () => {
-            Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => CekDataPage(
-                      // nama: widget.nama,
-                      // noHp: noHpRegisterController.text),
-                      ),
-                ))
-          },
-        );
+        // print(idMember);
+        FlutterFlexibleToast.showToast(
+            message:
+                'Pendaftaran member berhasil , menunggu persetujuan admin ...',
+            toastLength: Toast.LENGTH_LONG,
+            toastGravity: ToastGravity.TOP,
+            icon: ICON.LOADING,
+            radius: 40,
+            elevation: 10,
+            imageSize: 12,
+            textColor: Colors.white,
+            backgroundColor: Colors.green,
+            timeInSeconds: 1);
+        // }
+        new Timer(const Duration(seconds: 2), () {
+          Navigator.of(context).pushAndRemoveUntil(
+              CupertinoPageRoute(builder: (context) => WelcomePage()),
+              (route) => false);
+
+          // );
+        });
+        // void createAkun() async {
+        String nama = namaRegisterController.text;
+        registerMemberAkun(namaRegisterController.text, idMember)
+            .then((value) => {
+                  print(value),
+                  if (value == 200)
+                    {
+                      FlutterOpenWhatsapp.sendSingleMessage("628111755827",
+                          "Salam sejahtera  %0a Saya telah mengajukan pembuatan akun%0a atas nama $nama  %0a terimakasih")
+                    }
+                });
+        // }
         namaRegisterController.clear();
         noHpRegisterController.clear();
         emailRegisterController.clear();
 
         break;
-      case 201:
-        CoolAlert.show(
-          title: "anda sudah membuat pengajuan akun",
-          context: context,
-          type: CoolAlertType.info,
-          text: "Menunggu persetujuan admin",
-          onConfirmBtnTap: () => {
-            Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => WelcomePage(
-                      // nama: widget.nama,
-                      // noHp: noHpRegisterController.text),
-                      ),
-                ))
-          },
-        );
-        namaRegisterController.clear();
-        noHpRegisterController.clear();
+      //   case 201:
+      //     CoolAlert.show(
+      //       title: "anda sudah membuat pengajuan akun",
+      //       context: context,
+      //       type: CoolAlertType.info,
+      //       text: "Menunggu persetujuan admin",
+      //       onConfirmBtnTap: () => {
+      //         Navigator.push(
+      //             context,
+      //             CupertinoPageRoute(
+      //               builder: (context) => WelcomePage(
+      //                   // nama: widget.nama,
+      //                   // noHp: noHpRegisterController.text),
+      //                   ),
+      //             ))
+      //       },
+      //     );
+      //     namaRegisterController.clear();
+      //     noHpRegisterController.clear();
 
-        break;
+      //     break;
 
-      case 202:
-        CoolAlert.show(
-            title: "akun anda sudah dibuat",
-            context: context,
-            type: CoolAlertType.success,
-            text: "Silahkan login");
-        namaRegisterController.clear();
-        noHpRegisterController.clear();
-        Navigator.push(
-            context,
-            CupertinoPageRoute(
-              builder: (context) => WelcomePage(
-                  // nama: widget.nama,
-                  // noHp: noHpRegisterController.text),
-                  ),
-            ));
-        break;
+      //   case 202:
+      //     CoolAlert.show(
+      //         title: "akun anda sudah dibuat",
+      //         context: context,
+      //         type: CoolAlertType.success,
+      //         text: "Silahkan login");
+      //     namaRegisterController.clear();
+      //     noHpRegisterController.clear();
+      //     Navigator.push(
+      //         context,
+      //         CupertinoPageRoute(
+      //           builder: (context) => WelcomePage(
+      //               // nama: widget.nama,
+      //               // noHp: noHpRegisterController.text),
+      //               ),
+      //         ));
+      //     break;
       default:
     }
   }

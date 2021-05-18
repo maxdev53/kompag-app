@@ -10,7 +10,7 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Dashboard Maxpos',
+      title: 'Dashboard KOMPAG PPRMB',
       theme: ThemeData(
         // primarySwatch: Hexcolor('#ed0e0e'),
         primaryColor: Colors.white,

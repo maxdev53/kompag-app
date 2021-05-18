@@ -116,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 55, //10 for example
                             width: SizeConfig.safeBlockHorizontal * 103,
                             child: FadeAnimation(
-                              1.9,
+                              1.2,
                               Container(
                                 child: Center(
                                     // child: Text(
@@ -133,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   FadeAnimation(
-                    2.2,
+                    1.5,
                     Container(
                       child: Center(
                         child: RoundedInputField(
@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: SizeConfig.safeBlockHorizontal * 1),
                   FadeAnimation(
-                    2.5,
+                    1.8,
                     Container(
                       child: Center(
                         child: RoundedPasswordField(
@@ -158,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: size.height * 0.04),
                   FadeAnimation(
-                    2.9,
+                    2.1,
                     InkWell(
                       onTap: () => Navigator.push(
                         context,
@@ -312,7 +312,6 @@ Future<String> attemptLogin(String email, String password) async {
     'email': email,
     'password': password,
   });
-  print(response.statusCode);
   if (response.statusCode == 200) return response.body;
   return null;
 }

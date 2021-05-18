@@ -23,6 +23,7 @@ import 'package:flutter_login_register_ui/config/palette.dart';
 import 'package:flutter_login_register_ui/widgets/my_text_field.dart';
 import 'package:flutter_login_register_ui/widgets/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:pk_skeleton/pk_skeleton.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilScreen extends StatefulWidget {
@@ -41,7 +42,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
   TextEditingController noKkController = new TextEditingController();
   TextEditingController noKtpController = new TextEditingController();
   List _marga;
-  bool _isLoading = true;
+  bool _isLoading = false;
   List _generasi;
   List _parompuon;
   List _wilayah;
@@ -308,6 +309,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
   @override
   void initState() {
+    _isLoading = true;
     super.initState();
     getMarga();
     getGenerasi();
@@ -365,7 +367,15 @@ class _ProfilScreenState extends State<ProfilScreen> {
   SliverToBoxAdapter _buildStepperForm(double screenHeight) {
     return SliverToBoxAdapter(
         child: _isLoading
-            ? SkeletonWidget()
+            ? Row(
+                children: [
+                  Expanded(
+                      child: SizedBox(
+                    height: 550.0,
+                    child: PKCardPageSkeleton(),
+                  )),
+                ],
+              )
             : Row(
                 children: <Widget>[
                   Expanded(

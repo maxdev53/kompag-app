@@ -6,6 +6,7 @@ import 'package:flutter_login_register_ui/screens/screen.dart';
 import 'package:flutter_login_register_ui/screens/welcome_page.dart';
 import 'package:flutter_login_register_ui/widgets/my_text_button.dart';
 import 'package:flutter_login_register_ui/widgets/my_text_field.dart';
+import 'package:page_transition/page_transition.dart';
 // import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 
 import '../constants.dart';
@@ -68,59 +69,91 @@ class _ListUserState extends State<ListUser> {
                           //   height: 14,
                           // ),
 
-                          Container(
-                            child: Container(
-                              // color: Colors.black,
-                              height: 600.0,
-                              width: 400.0,
-                              child: ListView.builder(
-                                  itemCount: null == widget.members
-                                      ? 0
-                                      : widget.members.length,
-                                  itemBuilder: (context, index) {
-                                    Member member = widget.members[index];
-                                    return ListTile(
-                                      leading: CircleAvatar(
-                                        radius: 25,
-                                        backgroundImage:
-                                            member.jk == 'Perempuan'
-                                                ? AssetImage(
-                                                    'assets/images/women.png')
-                                                : AssetImage(
-                                                    'assets/images/man.png'),
-                                      ),
-                                      onTap: () {
-                                        print('tapped...');
-                                        Navigator.push(
-                                          context,
-                                          CupertinoPageRoute(
-                                            builder: (context) => RegisterPage(
-                                              nama: member.nama,
-                                              id: member.idMember,
-                                              haveName: true,
+                          widget.members.length <= 0
+                              ? Container(
+                                  child: Row(
+                                    children: [
+                                      Text("Data tidak ditemukan."),
+                                      InkWell(
+                                        onTap: () {
+                                          print("Register Tapped");
+                                          Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                  duration: Duration(
+                                                      milliseconds: 700),
+                                                  type: PageTransitionType
+                                                      .leftToRightWithFade,
+                                                  // alignment: Alignment.centerLeft,
+                                                  child: RegisterPage(
+                                                    haveName: false,
+                                                  )));
+                                        },
+                                        child: Text(
+                                          " Daftar",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : Container(
+                                  child: Container(
+                                    // color: Colors.black,
+                                    height: 600.0,
+                                    width: 400.0,
+                                    child: ListView.builder(
+                                        itemCount: null == widget.members
+                                            ? 0
+                                            : widget.members.length,
+                                        itemBuilder: (context, index) {
+                                          Member member = widget.members[index];
+                                          return ListTile(
+                                            leading: CircleAvatar(
+                                              radius: 25,
+                                              backgroundImage: member.jk ==
+                                                      'Perempuan'
+                                                  ? AssetImage(
+                                                      'assets/images/women.png')
+                                                  : AssetImage(
+                                                      'assets/images/man.png'),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                      hoverColor: Colors.black,
-                                      focusColor: Colors.black,
-                                      title: Text(
-                                        member.nama,
-                                        style: kTitleText,
-                                      ),
-                                      subtitle: Text(
-                                        '${member.wilayah} : ${member.sektor}',
-                                        style: kDescriptionText,
-                                      ),
-                                      trailing: Icon(
-                                        Icons.keyboard_arrow_right,
-                                        color: Colors.white,
-                                      ),
-                                      dense: true,
-                                    );
-                                  }),
-                            ),
-                          ),
+                                            onTap: () {
+                                              print('tapped...');
+                                              Navigator.push(
+                                                context,
+                                                CupertinoPageRoute(
+                                                  builder: (context) =>
+                                                      RegisterPage(
+                                                    nama: member.nama,
+                                                    id: member.idMember,
+                                                    haveName: true,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            hoverColor: Colors.black,
+                                            focusColor: Colors.black,
+                                            title: Text(
+                                              member.nama,
+                                              style: kTitleText,
+                                            ),
+                                            subtitle: Text(
+                                              '${member.wilayah} : ${member.sektor}',
+                                              style: kDescriptionText,
+                                            ),
+                                            trailing: Icon(
+                                              Icons.keyboard_arrow_right,
+                                              color: Colors.white,
+                                            ),
+                                            dense: true,
+                                          );
+                                        }),
+                                  ),
+                                ),
                           // Text('members', style: kBodyText2)
                         ],
                       ),

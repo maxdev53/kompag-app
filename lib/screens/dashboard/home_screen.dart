@@ -14,7 +14,6 @@ import 'package:flutter_login_register_ui/config/palette.dart';
 // import 'package:flutter_login_register_ui/config/styles.dart';
 import 'package:flutter_login_register_ui/data/data.dart';
 import 'package:flutter_login_register_ui/widgets/widgets.dart';
-import 'package:vertical_card_pager/vertical_card_pager.dart';
 // import 'package:get/get.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
@@ -81,7 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
   void getInformasi() async {
     Services.getInformasi().then((informasis) {
-      // print(informasis);
       setState(() {
         _loading = false;
         _informasis = informasis;
@@ -101,56 +99,10 @@ class _HomeScreenState extends State<HomeScreen> {
     // sharedPref.save('memberDetail', _memberDetailSave);
     // print(_member);
     super.initState();
-    // Services.getInformasi().then((informasis) {
-    //   print(informasis);
-    //   // setState(() {
-    //   _loading = false;
-    //   _informasis = informasis;
-
-    //   // });
-    // });
-    // MobileNumber.listenPhonePermission((isPermissionGranted) {
-    //   if (isPermissionGranted) {
-    //     initMobileNumberState();
-    //   } else {}
-    // });
-
-    // initMobileNumberState();
+    
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  // Future<void> initMobileNumberState() async {
-  //   if (!await MobileNumber.hasPhonePermission) {
-  //     await MobileNumber.requestPhonePermission;
-  //     return;
-  //   }
-  //   String mobileNumber = '';
-  //   // Platform messages may fail, so we use a try/catch PlatformException.
-  //   try {
-  //     mobileNumber = (await MobileNumber.mobileNumber);
-  //     _simCard = (await MobileNumber.getSimCards);
-  //   } on PlatformException catch (e) {
-  //     debugPrint("Failed to get mobile number because of '${e.message}'");
-  //   }
-
-  //   Widget fillCards() {
-  //     List<Widget> widgets = _simCard
-  //         .map((SimCard sim) => Text(
-  //             'Sim Card Number: (${sim.countryPhonePrefix}) - ${sim.number}\nCarrier Name: ${sim.carrierName}\nCountry Iso: ${sim.countryIso}\nDisplay Name: ${sim.displayName}\nSim Slot Index: ${sim.slotIndex}\n\n'))
-  //         .toList();
-  //     return Column(children: widgets);
-  //   }
-
-  //   // If the widget was removed from the tree while the asynchronous platform
-  //   // message was in flight, we want to discard the reply rather than calling
-  //   // setState to update our non-existent appearance.
-  //   if (!mounted) return;
-
-  //   setState(() {
-  //     _mobileNumber = mobileNumber;
-  //   });
-  // }
-
+  
   Future<bool> _onBackPressed() {
     return showDialog(
           context: context,
@@ -196,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
             _buildHeader(screenHeight),
             _buildPosTips(screenHeight),
             _buildDetail(screenHeight),
-            _buildHotPromo(screenHeight),
+            // _buildHotPromo(screenHeight),
           ],
         ),
         // drawer: Drawer(
@@ -216,18 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
 // List<Widget> widgets = _informasis.map((name) => new Text(name.gambarIsi)).toList();
   // List<Informasi> _informasis;
   Widget gambar() {
-    print("ini $_informasis");
-    //   child: ListView.builder(
-    //       // widget.usernames.length != null ? widget.usernames.length : 0;
-    //       itemCount: _loading ? 0 : _informasis.length,
-    //       itemBuilder: (context, index) {
-    //         Informasi informasi = _informasis[index];
-    //         return ListTile(
-    //           title: Text(informasi.judul),
-    //           // subtitle: Text(informasi.konten),
-    //         );
-    //       }),
-    // ),
+    
     return new Column(
         // Informasis informasis = informasis;
         children: _informasis
@@ -299,84 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 //         onPressed: () async {
                 //           // final prefs = await SharedPreferences.getInstance();
 
-                //           // var member =
-                //           //     await Services.getMemberDetail(_memberId);
-                //           // prefs.setString('detailMember', json.encode(member));
-                //           // print("data $member");
-                //           //  .then((member) => {
-                //           //         print("member home : $member"),
-                //           // sharedPref.save('member', member);
-                //           //         setState(() {
-                //           //           print("member dalam state : $member");
-
-                //           //           _memberDetailSave = member;
-                //           //         })
-                //           //       });
-                //           // Services.getMemberDetail(_memberId).then((member) => {
-                //           //       setState(() {
-                //           //         _member = member;
-                //           //       })
-                //           //     });
-                //           // Get.toNamed('/navigation', arguments: 3);
-                //           // Map<String, String> allValues =
-                //           //     await storage.readAll();
-                //           // print(allValues);
-
-                //           Navigator.push(
-                //             context,
-                //             CupertinoPageRoute(
-                //               builder: (context) => BottomNavScreen(
-                //                 pageIndex: 1,
-                //                 // memberDetail: _memberDetail
-                //               ),
-                //             ),
-                //           );
-                //         },
-                //         icon: const Icon(Icons.featured_play_list,
-                //             color: Colors.black),
-                //         color: Colors.white,
-                //         shape: RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.circular(30.0)),
-                //         label:
-                //             Text('Update data', style: Styles.buttonTextStyle),
-                //         textColor: Colors.black),
-                //     FlatButton.icon(
-                //         padding: const EdgeInsets.symmetric(
-                //             vertical: 10.0, horizontal: 20.0),
-                //         onPressed: () async {
-                //           await storage.deleteAll();
-                //           SharedPreferences preferences =
-                //               await SharedPreferences.getInstance();
-                //           await preferences.clear();
-                //           // Services.getMemberDetail(_memberId).then((member) => {
-                //           //       setState(() {
-                //           //         _member = member;
-                //           //       })
-                //           //     });
-                //           // Get.toNamed('/navigation', arguments: 3);
-                //           // Map<String, String> allValues =
-                //           //     await storage.readAll();
-                //           // print(allValues);
-
-                //           Navigator.push(
-                //             context,
-                //             CupertinoPageRoute(
-                //               builder: (context) => WelcomePage(
-                //                   // pageIndex: 1,
-                //                   // memberDetail: _memberDetail
-                //                   ),
-                //             ),
-                //           );
-                //         },
-                //         icon: const Icon(Icons.featured_play_list,
-                //             color: Colors.black),
-                //         color: Colors.white,
-                //         shape: RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.circular(30.0)),
-                //         label: Text('Keluar', style: Styles.buttonTextStyle),
-                //         textColor: Colors.black)
-                //   ],
-                // )
+              
               ],
             )
           ],
@@ -449,7 +313,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   SliverToBoxAdapter _buildHotPromo(double screenHeight) {
-    // print(_informasis);
     return SliverToBoxAdapter(
       child: Container(
         padding: const EdgeInsets.all(20.0),

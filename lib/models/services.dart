@@ -63,7 +63,7 @@ class Services {
         var responseBody = json.encode(body['data']);
 
         final List<Informasi> informasi = informasiFromJson(responseBody);
-        print(informasi);
+        // print(informasi);
         return informasi;
       } else {
         // return Informasi();
