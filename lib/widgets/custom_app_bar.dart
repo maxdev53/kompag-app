@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login_register_ui/config/palette.dart';
 
 class CustomAppBar extends StatefulWidget with PreferredSizeWidget {
-  const CustomAppBar({Key key}) : super(key: key);
+  const CustomAppBar({Key key, this.color}) : super(key: key);
+  final Color color ;
 
   @override
   _CustomAppBarState createState() => _CustomAppBarState();
@@ -14,11 +15,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Palette.primaryColor,
+      backgroundColor: widget.color,
       elevation: 0.0,
       leading: Builder(
         builder: (BuildContext context) {
-          
           return Container();
           // return IconButton(
           //   icon: const Icon(Icons.menu),

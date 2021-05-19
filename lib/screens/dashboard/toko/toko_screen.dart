@@ -56,7 +56,7 @@ class _BarangScreenState extends State<BarangScreen> {
 
     return Scaffold(
       // backgroundColor: Palette.primaryColor,
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(color: Palette.primaryColor),
       body: CustomScrollView(
         physics: ClampingScrollPhysics(),
         slivers: <Widget>[

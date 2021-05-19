@@ -152,39 +152,42 @@ class _CekDataPageState extends State<CekDataPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    MyTextButton(
-                        bgColor: Colors.black,
-                        buttonName: 'Cari anggota',
-                        onTap: () async {
-                          // print('Pencarian nama : ' +
-                          //     namaController.text +
-                          //     '....');
-                          // Response response;
-                          // var dio = Dio();
-                          bl.display();
-                          Services.getMembers(namaController.text)
-                              .then((members) => {
-                                    bl.close(),
-                                    namaController.clear(),
-                                    setState(() {
-                                      _members = members;
-                                      _loading = false;
-                                    }),
-                                    Navigator.push(
-                                      context,
-                                      CupertinoPageRoute(
-                                        builder: (context) => ListUser(
-                                          members: members,
+                    Container(
+                      margin: EdgeInsets.only(bottom: 6.0),
+                      child: MyTextButton(
+                          bgColor: Colors.black,
+                          buttonName: 'Cari anggota',
+                          onTap: () async {
+                            // print('Pencarian nama : ' +
+                            //     namaController.text +
+                            //     '....');
+                            // Response response;
+                            // var dio = Dio();
+                            bl.display();
+                            Services.getMembers(namaController.text)
+                                .then((members) => {
+                                      bl.close(),
+                                      namaController.clear(),
+                                      setState(() {
+                                        _members = members;
+                                        _loading = false;
+                                      }),
+                                      Navigator.push(
+                                        context,
+                                        CupertinoPageRoute(
+                                          builder: (context) => ListUser(
+                                            members: members,
+                                          ),
                                         ),
                                       ),
-                                    ),
 
-                                    // print(members)
-                                  });
-                          // response = await dio.post(url);
-                        },
-                        // bgColor: Color(0xffd9ced6),
-                        textColor: Colors.white),
+                                      // print(members)
+                                    });
+                            // response = await dio.post(url);
+                          },
+                          // bgColor: Color(0xffd9ced6),
+                          textColor: Colors.white),
+                    ),
                   ],
                 ),
               ),

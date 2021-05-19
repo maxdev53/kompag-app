@@ -38,7 +38,7 @@ class _SettingScreenState extends State<SettingScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       // backgroundColor: Palette.primaryColor,
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(color: Palette.primaryColor),
       body: ModalProgressHUD(
         inAsyncCall: _saving,
         child: CustomScrollView(

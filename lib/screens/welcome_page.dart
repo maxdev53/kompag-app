@@ -12,7 +12,7 @@ class WelcomePage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: Column(
             children: [
               Flexible(
@@ -50,6 +50,8 @@ class WelcomePage extends StatelessWidget {
                 ),
               ),
               Container(
+                margin: EdgeInsets.only(bottom: 6.0),
+                // padding: EdgeInsets.all(6.0),
                 height: 60,
                 decoration: BoxDecoration(
                   color: Colors.black,

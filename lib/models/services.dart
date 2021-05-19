@@ -15,6 +15,43 @@ class Services {
   final String uri = 'https://apikompag.maxproitsolution.com/api/';
   static const String url =
       'https://apikompag.maxproitsolution.com/api/checkMember';
+
+  static Future updateStatusMember(
+      String idMember, String marga, String pasangan, String city) async {
+    try {
+      String token = await storage.read(key: 'token');
+      String url =
+          'https://apikompag.maxproitsolution.com/api/anggota/self-update-status-member/' +
+              idMember;
+      // String token = await storage.read(key: 'token');
+      Map<String, String> headers = {
+        "Content-Type": "application/json",
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      };
+
+      //  String json =
+      var response = await http.put(url,
+          headers: headers,
+          body: jsonEncode({
+            'keterangan_marga': marga,
+            'keterangan_pasangan': pasangan,
+            'keterangan_city': city
+          }));
+      // print(response.body);
+      if (response.statusCode == 200) {
+        // final Marga marga = margaFromJson(response.body);
+        // return marga;
+        return true;
+      } else {
+        return false;
+        // return Marga();
+      }
+    } catch (e) {
+      // return Marga();
+    }
+  }
+
   static Future<List<Member>> getMembers(dynamic keyword) async {
     // String keyword;
     //

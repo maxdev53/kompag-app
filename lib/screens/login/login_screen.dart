@@ -6,6 +6,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flexible_toast/flutter_flexible_toast.dart';
+import 'package:flutter_login_register_ui/screens/register/filter_register_screen.dart';
 import 'package:flutter_login_register_ui/screens/screen.dart';
 import 'package:http/http.dart' as http;
 
@@ -74,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               30, //10 for example
                           width: SizeConfig.safeBlockHorizontal * 40,
                           child: FadeAnimation(
-                            1,
+                            0.6,
                             Container(
                               decoration: BoxDecoration(
                                   image: DecorationImage(
@@ -88,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               21, //10 for example
                           width: SizeConfig.safeBlockHorizontal * 98,
                           child: FadeAnimation(
-                            1.3,
+                            0.9,
                             Container(
                               decoration: BoxDecoration(
                                   image: DecorationImage(
@@ -102,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               33, //10 for example
                           width: SizeConfig.safeBlockHorizontal * 160,
                           child: FadeAnimation(
-                            1.6,
+                            1.2,
                             Container(
                               decoration: BoxDecoration(
                                   image: DecorationImage(
@@ -116,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 55, //10 for example
                             width: SizeConfig.safeBlockHorizontal * 103,
                             child: FadeAnimation(
-                              1.2,
+                              1.3,
                               Container(
                                 child: Center(
                                     // child: Text(
@@ -133,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   FadeAnimation(
-                    1.5,
+                    1.6,
                     Container(
                       child: Center(
                         child: RoundedInputField(
@@ -146,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: SizeConfig.safeBlockHorizontal * 1),
                   FadeAnimation(
-                    1.8,
+                    1.9,
                     Container(
                       child: Center(
                         child: RoundedPasswordField(
@@ -158,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: size.height * 0.04),
                   FadeAnimation(
-                    2.1,
+                    2.2,
                     InkWell(
                       onTap: () => Navigator.push(
                         context,
@@ -277,15 +278,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           onTap: () {
                             print("Register Tapped");
                             Navigator.push(
-                                context,
-                                PageTransition(
-                                    duration: Duration(milliseconds: 700),
-                                    type:
-                                        PageTransitionType.leftToRightWithFade,
-                                    // alignment: Alignment.centerLeft,
-                                    child: RegisterPage(
-                                      haveName: false,
-                                    )));
+                              context,
+                              PageTransition(
+                                duration: Duration(milliseconds: 700),
+                                type: PageTransitionType.leftToRightWithFade,
+                                // alignment: Alignment.centerLeft,
+                                // child: RegisterPage(
+                                //   haveName: false,
+                                // ),
+                                child: RegisterPage(
+                                  haveName: false,
+                                ),
+                              ),
+                            );
                           },
                           child: Text(
                             " Daftar",

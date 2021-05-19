@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        appBar: CustomAppBar(),
+        appBar: CustomAppBar( color: Palette.primaryColor),
         body: CustomScrollView(
           physics: ClampingScrollPhysics(),
           slivers: [

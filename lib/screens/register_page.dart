@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flexible_toast/flutter_flexible_toast.dart';
 import 'package:flutter_login_register_ui/main.dart';
+import 'package:flutter_login_register_ui/screens/register/filter_register_screen.dart';
 import 'package:flutter_login_register_ui/screens/register_akun.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 // import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -206,22 +207,26 @@ class _RegisterPageState extends State<RegisterPage> {
       //     break;
       case 200:
         // print(idMember);
-        FlutterFlexibleToast.showToast(
-            message:
-                'Pendaftaran member berhasil , menunggu persetujuan admin ...',
-            toastLength: Toast.LENGTH_LONG,
-            toastGravity: ToastGravity.TOP,
-            icon: ICON.LOADING,
-            radius: 40,
-            elevation: 10,
-            imageSize: 12,
-            textColor: Colors.white,
-            backgroundColor: Colors.green,
-            timeInSeconds: 1);
+        // FlutterFlexibleToast.showToast(
+        //     message:
+        //         'Pendaftaran member berhasil, tunggu ...',
+        //     toastLength: Toast.LENGTH_LONG,
+        //     toastGravity: ToastGravity.TOP,
+        //     icon: ICON.LOADING,
+        //     radius: 40,
+        //     elevation: 10,
+        //     imageSize: 12,
+        //     textColor: Colors.white,
+        //     backgroundColor: Colors.green,
+        //     timeInSeconds: 1);
         // }
-        new Timer(const Duration(seconds: 2), () {
+        new Timer(const Duration(seconds: 1), () {
           Navigator.of(context).pushAndRemoveUntil(
-              CupertinoPageRoute(builder: (context) => WelcomePage()),
+              CupertinoPageRoute(
+                  builder: (context) => FilterRegisterScreen(
+                        namaMember: namaRegisterController.text,
+                        idMember: idMember,
+                      )),
               (route) => false);
 
           // );
@@ -231,11 +236,11 @@ class _RegisterPageState extends State<RegisterPage> {
         registerMemberAkun(namaRegisterController.text, idMember)
             .then((value) => {
                   print(value),
-                  if (value == 200)
-                    {
-                      FlutterOpenWhatsapp.sendSingleMessage("628111755827",
-                          "Salam sejahtera  %0a Saya telah mengajukan pembuatan akun%0a atas nama $nama  %0a terimakasih")
-                    }
+                  // if (value == 200)
+                  //   {
+                  //     FlutterOpenWhatsapp.sendSingleMessage("628111755827",
+                  //         "Salam sejahtera  %0a Saya telah mengajukan pembuatan akun%0a atas nama $nama  %0a terimakasih")
+                  //   }
                 });
         // }
         namaRegisterController.clear();
@@ -401,17 +406,20 @@ class _RegisterPageState extends State<RegisterPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    MyTextButton(
-                      buttonName:
-                          widget.haveName ? 'Registrasi pertama' : 'Daftar',
-                      onTap: () async {
-                        print('tap daftar');
-                        widget.haveName
-                            ? await registerAkun()
-                            : await registerMember();
-                      },
-                      bgColor: Colors.black,
-                      textColor: Colors.white,
+                    Container(
+                      margin: EdgeInsets.all(6.0),
+                      child: MyTextButton(
+                        buttonName:
+                            widget.haveName ? 'Registrasi pertama' : 'Daftar',
+                        onTap: () async {
+                          print('tap daftar');
+                          widget.haveName
+                              ? await registerAkun()
+                              : await registerMember();
+                        },
+                        bgColor: Colors.black,
+                        textColor: Colors.white,
+                      ),
                     )
                   ],
                 ),

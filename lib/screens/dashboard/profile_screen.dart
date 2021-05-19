@@ -352,7 +352,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       // backgroundColor: Palette.primaryColor,
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(color: Palette.primaryColor),
       body: CustomScrollView(
         physics: ClampingScrollPhysics(),
         slivers: <Widget>[

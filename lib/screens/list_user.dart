@@ -103,7 +103,7 @@ class _ListUserState extends State<ListUser> {
                               : Container(
                                   child: Container(
                                     // color: Colors.black,
-                                    height: 600.0,
+                                    height: 570.0,
                                     width: 400.0,
                                     child: ListView.builder(
                                         itemCount: null == widget.members
@@ -161,23 +161,26 @@ class _ListUserState extends State<ListUser> {
                     SizedBox(
                       height: 20,
                     ),
-                    MyTextButton(
-                        buttonName: 'Kembali',
-                        onTap: () {
-                          // print(
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => CekDataPage(),
-                            ),
-                          );
+                    Container(
+                      margin: EdgeInsets.all(6.0),
+                      child: MyTextButton(
+                          buttonName: 'Kembali',
+                          onTap: () {
+                            // print(
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => CekDataPage(),
+                              ),
+                            );
 
-                          // print(members)
-                          // );
-                          // response = await dio.post(url);
-                        },
-                        bgColor: Colors.black,
-                        textColor: Colors.white),
+                            // print(members)
+                            // );
+                            // response = await dio.post(url);
+                          },
+                          bgColor: Colors.black,
+                          textColor: Colors.white),
+                    ),
                   ],
                 ),
               ),
