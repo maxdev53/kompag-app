@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_register_ui/config/palette.dart';
 import 'package:flutter_login_register_ui/screens/login/login_screen.dart';
+import 'package:page_transition/page_transition.dart';
 import '../constants.dart';
 import '../screens/screen.dart';
 import '../widgets/widget.dart';
@@ -66,8 +67,13 @@ class WelcomePage extends StatelessWidget {
                         onTap: () {
                           Navigator.push(
                               context,
-                              CupertinoPageRoute(
-                                  builder: (context) => CekDataPage()));
+                              PageTransition(
+                                  duration: Duration(milliseconds: 700),
+                                  type: PageTransitionType.rightToLeftWithFade,
+                                  // alignment: Alignment.centerLeft,
+                                  child: CekDataPage(
+                                      // haveName: false,
+                                      )));
                         },
                         textColor: Colors.white,
                       ),

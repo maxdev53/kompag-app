@@ -24,29 +24,15 @@ class _HomePageState extends State<HomePage> {
     return nama;
   }
 
-  // void requestPhone() async {
-  //   var data = await MobileNumber.requestPhonePermission;
-  // }
-
-  // Future<dynamic> checkPermissionPhone() async {
-  //   var data = await MobileNumber.hasPhonePermission;
-  //   print(data);
-  //   return data;
-  // }
-
   @override
   void initState() {
     getName();
-    // checkPermissionPhone();
-    // requestPhone();
+   
     super.initState();
   }
 
   Widget build(BuildContext context) {
-    // print(_nama);
-    // getName().then((value) => {
-    //       setState(() => {_nama = value})
-    //     });
+    
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -102,7 +88,6 @@ class _HomePageState extends State<HomePage> {
                         onTap: () async {
                           Map<String, String> allValues =
                               await storage.readAll();
-                          // print(allValues);
                         },
                         textColor: Color(0xff303437),
                       ),
@@ -135,8 +120,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-// Future<String> getLoginName() async {
-//   String nama = await storage.read(key: 'nama');
-//    print(nama);
-//    setState(() =>);
-// }
+

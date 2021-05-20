@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login_register_ui/Models/member.dart';
 import 'package:flutter_login_register_ui/Models/services.dart';
 import 'package:flutter_login_register_ui/screens/list_user.dart';
+import 'package:page_transition/page_transition.dart';
 import '../constants.dart';
 import '../screens/screen.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
@@ -23,6 +24,7 @@ TextEditingController namaController = new TextEditingController();
 class _CekDataPageState extends State<CekDataPage> {
   List<Member> _members;
   bool _loading = false;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -42,8 +44,6 @@ class _CekDataPageState extends State<CekDataPage> {
 
   final String uri = 'https://apikompag.maxproitsolution.com/api';
   Future<String> getMarga() async {
-    // var marga = await Services.getMarga();
-    // print(marga);
     var res = await http.get(Uri.parse("$uri/statistik/select-marga"));
     var resBody = json.decode(res.body);
 
@@ -62,8 +62,6 @@ class _CekDataPageState extends State<CekDataPage> {
       isDismissible: false,
     );
     bl.style(
-        // progressWidget: ,
-        // messageTextStyle: ,
         message: 'mohon tunggu...',
         messageTextStyle: TextStyle(
           color: Colors.black,
@@ -76,7 +74,13 @@ class _CekDataPageState extends State<CekDataPage> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+                context,
+                PageTransition(
+                    duration: Duration(milliseconds: 700),
+                    type: PageTransitionType.leftToRightWithFade,
+                    // alignment: Alignment.centerLeft,
+                    child: WelcomePage()));
           },
           icon: Image(
             width: 24,
@@ -117,38 +121,14 @@ class _CekDataPageState extends State<CekDataPage> {
                             height: 68,
                           ),
                           MyTextField(
+                            formKey: _formKey,
                             hintText: 'Nama',
                             controller: namaController,
-                            inputType: TextInputType.text,
+                            inputType: TextInputType.name,
                           ),
                         ],
                       ),
                     ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     Text(
-                    //       "Tidak ada nama anda? ",
-                    //       style: kBodyText,
-                    //     ),
-                    //     GestureDetector(
-                    //       onTap: () {
-                    //         Navigator.push(
-                    //           context,
-                    //           CupertinoPageRoute(
-                    //             builder: (context) => RegisterPage(),
-                    //           ),
-                    //         );
-                    //       },
-                    //       child: Text(
-                    //         'Daftar',
-                    //         style: kBodyText.copyWith(
-                    //           color: Colors.white,
-                    //         ),
-                    //       ),
-                    //     )
-                    //   ],
-                    // ),
                     SizedBox(
                       height: 20,
                     ),
@@ -158,34 +138,31 @@ class _CekDataPageState extends State<CekDataPage> {
                           bgColor: Colors.black,
                           buttonName: 'Cari anggota',
                           onTap: () async {
-                            // print('Pencarian nama : ' +
-                            //     namaController.text +
-                            //     '....');
-                            // Response response;
-                            // var dio = Dio();
-                            bl.display();
-                            Services.getMembers(namaController.text)
-                                .then((members) => {
-                                      bl.close(),
-                                      namaController.clear(),
-                                      setState(() {
-                                        _members = members;
-                                        _loading = false;
-                                      }),
-                                      Navigator.push(
-                                        context,
-                                        CupertinoPageRoute(
-                                          builder: (context) => ListUser(
-                                            members: members,
+                            if (_formKey.currentState.validate()) {
+                              bl.display();
+                              Services.getMembers(namaController.text)
+                                  .then((members) => {
+                                        bl.close(),
+                                        namaController.clear(),
+                                        setState(() {
+                                          _members = members;
+                                          _loading = false;
+                                        }),
+                                        Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            duration:
+                                                Duration(milliseconds: 700),
+                                            type:
+                                                PageTransitionType.leftToRight,
+                                            child: ListUser(
+                                              members: members,
+                                            ),
                                           ),
-                                        ),
-                                      ),
-
-                                      // print(members)
-                                    });
-                            // response = await dio.post(url);
+                                        )
+                                      });
+                            }
                           },
-                          // bgColor: Color(0xffd9ced6),
                           textColor: Colors.white),
                     ),
                   ],

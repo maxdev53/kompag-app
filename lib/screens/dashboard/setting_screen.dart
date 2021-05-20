@@ -1,5 +1,3 @@
-import 'package:bottom_loader/bottom_loader.dart';
-import 'package:fbutton/fbutton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_register_ui/config/palette.dart';
@@ -14,7 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
 import '../welcome_page.dart';
-import 'bottom_nav_screen.dart';
 // import 'package:queen_alerts/queen_alerts.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -106,24 +103,42 @@ class _SettingScreenState extends State<SettingScreen> {
                           setState(() {
                             _saving = true;
                           });
-                          await storage.deleteAll();
-                          SharedPreferences preferences =
-                              await SharedPreferences.getInstance();
-                          await preferences.clear();
-                          new Future.delayed(new Duration(seconds: 2), () {
+
+                          var res = await Services.logOut();
+                          if (res) {
+                            await storage.deleteAll();
+                            SharedPreferences preferences =
+                                await SharedPreferences.getInstance();
+                            await preferences.clear();
+                            new Future.delayed(new Duration(seconds: 2), () {
+                              showToast('Akun anda berhasil keluar ',
+                                  position: StyledToastPosition.top,
+                                  context: context,
+                                  duration: Duration(seconds: 4),
+                                  animation: StyledToastAnimation.fade);
+                              setState(() {
+                                _saving = false;
+                              });
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => WelcomePage(
+                                      // pageIndex: 1,
+                                      // memberDetail: _memberDetail
+                                      ),
+                                ),
+                              );
+                            });
+                          } else {
                             setState(() {
                               _saving = false;
                             });
-                            Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) => WelcomePage(
-                                    // pageIndex: 1,
-                                    // memberDetail: _memberDetail
-                                    ),
-                              ),
-                            );
-                          });
+                            showToast('Gagal , gangguan server ',
+                                position: StyledToastPosition.center,
+                                context: context,
+                                duration: Duration(seconds: 2),
+                                animation: StyledToastAnimation.fade);
+                          }
                         },
                         icon: const Icon(Icons.featured_play_list,
                             color: Colors.black),

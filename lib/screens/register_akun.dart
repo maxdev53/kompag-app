@@ -1,7 +1,8 @@
-import 'package:cool_alert/cool_alert.dart';
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import '../widgets/widget.dart';
 import '../constants.dart';
@@ -76,6 +77,7 @@ class _RegisterAkunState extends State<RegisterAkun> {
                             height: 50,
                           ),
                           MyTextField(
+                            formKey: GlobalKey<FormState>(),
                             enableInput: false,
                             hintText: 'Nama',
                             controller: namaRegisterController,
@@ -87,6 +89,7 @@ class _RegisterAkunState extends State<RegisterAkun> {
                           //   inputType: TextInputType.emailAddress,
                           // ),
                           MyTextField(
+                            formKey: GlobalKey<FormState>(),
                             hintText: 'No HP',
                             enableInput: false,
                             controller: noHpRegisterController,
@@ -142,20 +145,20 @@ class _RegisterAkunState extends State<RegisterAkun> {
                           // 'email': emailRegisterController.text,
                         });
                         if (response.statusCode == 200) {
-                          CoolAlert.show(
+                          showToast('registrasi Berhasil',
+                              position: StyledToastPosition.bottom,
                               context: context,
-                              type: CoolAlertType.success,
-                              text: "Registrasi pertama berhasil",
-                              onConfirmBtnTap: () => {
-                                    Navigator.push(
-                                      context,
-                                      CupertinoPageRoute(
-                                        builder: (context) => SignInPage(),
-                                      ),
-                                    )
-                                  });
+                              duration: Duration(seconds: 1),
+                              animation: StyledToastAnimation.scale);
+                          Timer(
+                              Duration(seconds: 2),
+                              () => Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                      builder: (context) => SignInPage(),
+                                    ),
+                                  ));
                         }
-                        print(response.statusCode);
                       },
                       bgColor: Colors.white,
                       textColor: Colors.black87,

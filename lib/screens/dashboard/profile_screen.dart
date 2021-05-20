@@ -34,6 +34,17 @@ class ProfilScreen extends StatefulWidget {
 }
 
 class _ProfilScreenState extends State<ProfilScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _formKey1 = GlobalKey<FormState>();
+  final _formKey2 = GlobalKey<FormState>();
+  final _formKey3 = GlobalKey<FormState>();
+  final _formKey4 = GlobalKey<FormState>();
+  final _formKey5 = GlobalKey<FormState>();
+  final _formKey6 = GlobalKey<FormState>();
+  final _formKey7 = GlobalKey<FormState>();
+  final _formKey8 = GlobalKey<FormState>();
+
+
   TextEditingController emailController = new TextEditingController();
   TextEditingController noHpController = new TextEditingController();
   TextEditingController namaController = new TextEditingController();
@@ -85,7 +96,6 @@ class _ProfilScreenState extends State<ProfilScreen> {
   String email;
 
   void getMemberDetail() async {
-    // print(memberId);
     String memberId = await storage.read(key: 'memberId');
     //
     try {
@@ -95,11 +105,9 @@ class _ProfilScreenState extends State<ProfilScreen> {
       // print(response.body);
       // bl.close();
       var jsonData = memberDetailFromJson(response.body);
-      print(jsonData);
       setState(() {
         _isLoading = false;
         _memberDetailLoad = jsonData;
-        print(_memberDetailLoad.nama);
         namaController.text = _memberDetailLoad.nama;
         namaMarga = _memberDetailLoad.marga;
         // print(_memberDetailLoad.generation);
@@ -517,9 +525,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
                                 ),
                                 MyTextField(
+                                  formKey: _formKey,
                                   controller: namaController,
                                   hintText: 'Nama',
-                                  inputType: TextInputType.text,
+                                  inputType: TextInputType.name,
                                 ),
                                 SizedBox(
                                   height: 3,
@@ -866,11 +875,13 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
 
                                   MyTextField(
+                                    formKey: _formKey1,
                                     controller: tempatLahirController,
                                     hintText: 'Tempat lahir',
                                     inputType: TextInputType.text,
                                   ),
                                   MyTextField(
+                                    formKey: _formKey2,
                                     enableInput: false,
                                     controller: tglLahirController,
                                     hintText: '$tglLahir',
@@ -1093,9 +1104,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                           MainAxisAlignment.start,
                                       children: <Widget>[
                                         MyTextField(
+                                          formKey: _formKey3,
                                           controller: noKkController,
                                           hintText: 'Nomer KK',
-                                          inputType: TextInputType.text,
+                                          inputType: TextInputType.number,
                                         ),
                                         SizedBox(
                                           height: 2,
@@ -1115,9 +1127,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                           ),
                                         ),
                                         MyTextField(
+                                          formKey: _formKey4,
                                           controller: noKtpController,
                                           hintText: 'Nomer KTP',
-                                          inputType: TextInputType.text,
+                                          inputType: TextInputType.number,
                                         ),
                                         Container(
                                           padding:
@@ -1244,9 +1257,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
                                 ),
                                 MyTextField(
+                                  formKey: _formKey5,
                                   controller: noHpController,
                                   hintText: 'No HP',
-                                  inputType: TextInputType.text,
+                                  inputType: TextInputType.number
                                 ),
                                 SizedBox(
                                   height: 2,
@@ -1265,9 +1279,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
                                 ),
                                 MyTextField(
+                                  formKey: _formKey6,
                                   controller: emailController,
                                   hintText: 'Email',
-                                  inputType: TextInputType.text,
+                                  inputType: TextInputType.emailAddress,
                                 ),
                                 SizedBox(
                                   height: 4,
@@ -1394,7 +1409,6 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                               hint: Text('$namaPendidikan'),
                                               onChanged: (String newValue) {
                                                 setState(() {
-                                                  print(newValue);
                                                   pendidikanId = newValue;
                                                   // _getCitiesList();
                                                   // getMarga();

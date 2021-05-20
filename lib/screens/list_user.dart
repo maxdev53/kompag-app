@@ -26,6 +26,7 @@ class _ListUserState extends State<ListUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       // appBar: AppBar(
       //   backgroundColor: kBackgroundColor,
       //   elevation: 0,
@@ -54,129 +55,174 @@ class _ListUserState extends State<ListUser> {
                   children: [
                     Flexible(
                       fit: FlexFit.loose,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Hasil pencarian",
-                            style: kHeadline2,
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Hasil pencarian",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 28.0),
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
 
-                          // SizedBox(
-                          //   height: 14,
-                          // ),
+                            // SizedBox(
+                            //   height: 14,
+                            // ),
 
-                          widget.members.length <= 0
-                              ? Container(
-                                  child: Row(
-                                    children: [
-                                      Text("Data tidak ditemukan."),
-                                      InkWell(
-                                        onTap: () {
-                                          print("Register Tapped");
-                                          Navigator.push(
+                            widget.members.length <= 0
+                                ? Container(
+                                    child: Row(
+                                      children: [
+                                        Text("Data tidak ditemukan."),
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(
                                               context,
                                               PageTransition(
-                                                  duration: Duration(
-                                                      milliseconds: 700),
-                                                  type: PageTransitionType
-                                                      .leftToRightWithFade,
-                                                  // alignment: Alignment.centerLeft,
-                                                  child: RegisterPage(
-                                                    haveName: false,
-                                                  )));
-                                        },
-                                        child: Text(
-                                          " Daftar",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              : Container(
-                                  child: Container(
-                                    // color: Colors.black,
-                                    height: 570.0,
-                                    width: 400.0,
-                                    child: ListView.builder(
-                                        itemCount: null == widget.members
-                                            ? 0
-                                            : widget.members.length,
-                                        itemBuilder: (context, index) {
-                                          Member member = widget.members[index];
-                                          return ListTile(
-                                            leading: CircleAvatar(
-                                              radius: 25,
-                                              backgroundImage: member.jk ==
-                                                      'Perempuan'
-                                                  ? AssetImage(
-                                                      'assets/images/women.png')
-                                                  : AssetImage(
-                                                      'assets/images/man.png'),
-                                            ),
-                                            onTap: () {
-                                              print('tapped...');
-                                              Navigator.push(
-                                                context,
-                                                CupertinoPageRoute(
-                                                  builder: (context) =>
-                                                      RegisterPage(
-                                                    nama: member.nama,
-                                                    id: member.idMember,
-                                                    haveName: true,
-                                                  ),
+                                                duration:
+                                                    Duration(milliseconds: 700),
+                                                type: PageTransitionType
+                                                    .leftToRightWithFade,
+                                                child: RegisterPage(
+                                                  haveName: false,
                                                 ),
-                                              );
-                                            },
-                                            hoverColor: Colors.black,
-                                            focusColor: Colors.black,
-                                            title: Text(
-                                              member.nama,
-                                              style: kTitleText,
-                                            ),
-                                            subtitle: Text(
-                                              '${member.wilayah} : ${member.sektor}',
-                                              style: kDescriptionText,
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color: Colors.white,
-                                            ),
-                                            dense: true,
-                                          );
-                                        }),
+                                              ),
+                                            );
+                                          },
+                                          child: Text(
+                                            " Daftar",
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                : Container(
+                                    child: Container(
+                                      color: Colors.white,
+                                      margin: EdgeInsets.only(top: 24.0),
+                                      // color: Colors.black,
+                                      height: 500.0,
+                                      width: 400.0,
+                                      child: ListView.builder(
+                                          itemCount: null == widget.members
+                                              ? 0
+                                              : widget.members.length,
+                                          itemBuilder: (context, index) {
+                                            Member member =
+                                                widget.members[index];
+                                            return ListTile(
+                                              leading: CircleAvatar(
+                                                foregroundColor: Colors.white,
+                                                radius: 25,
+                                                backgroundImage: member.jk ==
+                                                        'Perempuan'
+                                                    ? AssetImage(
+                                                        'assets/images/women.png')
+                                                    : AssetImage(
+                                                        'assets/images/man.png'),
+                                              ),
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  CupertinoPageRoute(
+                                                    builder: (context) =>
+                                                        RegisterPage(
+                                                      nama: member.nama,
+                                                      id: member.idMember,
+                                                      haveName: true,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              hoverColor: Colors.black,
+                                              selected: true,
+                                              focusColor: Colors.black,
+                                              isThreeLine: true,
+                                              title: Text(
+                                                member.nama,
+                                                style: kTitleText,
+                                              ),
+                                              subtitle: Text(
+                                                'Wilayah :${member.wilayah}\nSektor: ${member.sektor}',
+                                                style: kDescriptionText,
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color: Colors.black,
+                                              ),
+                                              dense: true,
+                                            );
+                                          }),
+                                    ),
                                   ),
-                                ),
-                          // Text('members', style: kBodyText2)
+                            // Text('members', style: kBodyText2)
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Tidak ada data yang dicari ?"),
+                          InkWell(
+                            onTap: () {
+                              print("Register Tapped");
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      duration: Duration(milliseconds: 700),
+                                      type: PageTransitionType
+                                          .leftToRightWithFade,
+                                      // alignment: Alignment.centerLeft,
+                                      child: RegisterPage(
+                                        haveName: false,
+                                      )));
+                            },
+                            child: Text(
+                              " Daftar",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14),
+                            ),
+                          )
                         ],
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 10.0,
                     ),
                     Container(
                       margin: EdgeInsets.all(6.0),
                       child: MyTextButton(
                           buttonName: 'Kembali',
                           onTap: () {
-                            // print(
                             Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) => CekDataPage(),
-                              ),
-                            );
+                                context,
+                                PageTransition(
+                                    duration: Duration(milliseconds: 700),
+                                    type: PageTransitionType.rightToLeft,
+                                    // alignment: Alignment.center,
+                                    // alignment: Alignment.centerLeft,
+                                    child: CekDataPage(
+                                        // members: members,
+                                        )));
 
-                            // print(members)
-                            // );
-                            // response = await dio.post(url);
+                           
                           },
                           bgColor: Colors.black,
                           textColor: Colors.white),

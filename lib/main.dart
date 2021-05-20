@@ -1,23 +1,21 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_login_register_ui/config/palette.dart';
+// import 'package:flutter_login_register_ui/config/palette.dart';
 import 'package:flutter_login_register_ui/helpers/storage.dart';
 import 'package:flutter_login_register_ui/router.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+// import 'package:new_version/new_version.dart';
+import 'package:in_app_update/in_app_update.dart';
+// import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
-import 'constants.dart';
+// import 'constants.dart';
 import './screens/screen.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:flutter_login_register_ui/components/splash_screen.dart';
-import 'package:flutter_login_register_ui/screens/dashboard/home_screen.dart';
 import 'package:flutter_login_register_ui/screens/dashboard/main.dart';
-import 'package:flutter_login_register_ui/screens/dashboard/toko/detail_screen.dart';
-import 'package:flutter_login_register_ui/screens/dashboard/toko/toko_screen.dart';
 
 const URI = 'https://apikompag.maxproitsolution.com/api';
 final storage = FlutterSecureStorage();
@@ -62,9 +60,39 @@ class _MyAppState extends State<MyApp> {
   bool _isValidToken = false;
   bool _pageLoad = false;
 
+  AppUpdateInfo _updateInfo;
+
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+
+  bool _flexibleUpdateAvailable = false;
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<AppUpdateInfo> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) {
+     
+      info?.updateAvailability == UpdateAvailability.updateAvailable
+          ? InAppUpdate.performImmediateUpdate()
+              .catchError((e) => showSnack(e.toString()))
+          : null;
+
+      setState(() {
+        _updateInfo = info;
+      });
+    }).catchError((e) {
+      showSnack(e.toString());
+    });
+  }
+
+
+  void showSnack(String text) {
+    if (_scaffoldKey.currentContext != null) {
+      ScaffoldMessenger.of(_scaffoldKey.currentContext)
+          .showSnackBar(SnackBar(content: Text(text)));
+    }
+  }
+
   Future<String> getToken() async {
     String token = await getStorageData('token');
-    // print(token);
     return token;
   }
 
@@ -77,12 +105,10 @@ class _MyAppState extends State<MyApp> {
       'Authorization': 'Bearer $token'
     };
 
-    //  String json =
     var response = await http.post(
       url,
       headers: headers,
     );
-    // print(response.body);
     setState(() {
       _pageLoad = false;
       response.statusCode == 200 ? _isValidToken = true : _isValidToken = false;
@@ -96,30 +122,33 @@ class _MyAppState extends State<MyApp> {
     _pageLoad = true;
     getToken().then((token) => {checkValidToken(token)});
     super.initState();
+    checkForUpdate();
   }
+
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        //  initialRoute: '/',
-        getPages: routerPage,
-        navigatorKey: Get.key,
-        title: 'kompag PPRMB',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-          scaffoldBackgroundColor: Colors.white,
-          primarySwatch: Colors.red,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: SplashScreenView(
-          // text: "Kompag PPRMB",
-          // textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w200),
+      //  initialRoute: '/',
+      getPages: routerPage,
+      navigatorKey: Get.key,
+      title: 'kompag PPRMB',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+        scaffoldBackgroundColor: Colors.white,
+        primarySwatch: Colors.red,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: Scaffold(
+       
+        body: SplashScreenView(
+         
           imageSrc: "assets/images/logo_maxpos.png",
           home: _isValidToken ? DashboardScreen() : WelcomePage(),
           duration: 2,
-        ));
-    // home: DashboardScreen(),
-    // home:  _isValidToken ? DashboardScreen():WelcomePage());
+        ),
+      ),
+    );
   }
 }
