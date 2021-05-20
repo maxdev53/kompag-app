@@ -4,18 +4,13 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:cool_stepper/cool_stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login_register_ui/config/palette.dart';
-import 'package:flutter_login_register_ui/screens/login/login_screen.dart';
-import 'package:flutter_login_register_ui/screens/screen.dart';
-import 'package:flutter_login_register_ui/widgets/custom_app_bar.dart';
-import 'package:flutter_login_register_ui/widgets/my_text_button.dart';
-import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
-import 'package:page_transition/page_transition.dart';
 // import 'package:flutter/services.dart';
 import 'package:flutter_login_register_ui/models/services.dart';
+import 'package:flutter_login_register_ui/screens/screen.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 
 class FilterRegisterScreen extends StatefulWidget {
-  FilterRegisterScreen({Key key, this.idMember, this.namaMember})
+  FilterRegisterScreen({Key key, this.idMember, @required this.namaMember})
       : super(key: key);
 
   // final String title;
@@ -33,13 +28,22 @@ class _FilterRegisterScreenState extends State<FilterRegisterScreen> {
   String _selectedOptionPasangan = '';
   // final TextEditingController _nameCtrl = TextEditingController();
   // final TextEditingController _emailCtrl = TextEditingController();
+  String getName() {
+    return widget.namaMember;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     void _onComplete() async {
-      // print(_selectedOptionMarga);
-      // print(_selectedOptionPasangan);
-      // print(_selectedOptionCity);
+      print("id :" + widget.idMember);
+      print("nama :" + widget.namaMember);
+      // print(widget.namaMember);
       var response = await Services.updateStatusMember(widget.idMember,
           _selectedOptionMarga, _selectedOptionPasangan, _selectedOptionCity);
       String nama = widget.namaMember;
@@ -59,9 +63,10 @@ class _FilterRegisterScreenState extends State<FilterRegisterScreen> {
           leftBarIndicatorColor: Colors.green,
         );
         new Timer(const Duration(seconds: 3), () {
+          // print(nama);
           {
             FlutterOpenWhatsapp.sendSingleMessage("628111755827",
-                "Salam sejahtera  %0a Saya telah mengajukan pembuatan akun%0a atas nama $nama %0a terimakasih");
+                "Salam sejahtera%0aSaya telah mengajukan pembuatan akun%0aNama : $nama %0a%0a terimakasih");
           }
           Navigator.of(context).pushAndRemoveUntil(
               CupertinoPageRoute(

@@ -30,6 +30,7 @@ TextEditingController noHpRegisterController = new TextEditingController();
 
 class _RegisterPageState extends State<RegisterPage> {
   bool _saving = false;
+  String _memberNama;
   final _formKey = GlobalKey<FormState>();
   final _formKey1 = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
@@ -190,14 +191,13 @@ class _RegisterPageState extends State<RegisterPage> {
         'email': emailRegisterController.text,
         'simcard_contact': phone,
       },
-      
     );
 
     var statusCode = response.statusCode;
     setState(() {
       _saving = false;
     });
-    
+
     String idMember;
     if (statusCode == 200) {
       var body = json.decode(response.body);
@@ -225,19 +225,37 @@ class _RegisterPageState extends State<RegisterPage> {
             context: context,
             duration: Duration(seconds: 1),
             animation: StyledToastAnimation.scale);
+        setState(() {
+          _memberNama = namaRegisterController.text;
+        });
+
         new Timer(const Duration(seconds: 2), () {
-          Navigator.of(context).pushAndRemoveUntil(
-              CupertinoPageRoute(
-                  builder: (context) => FilterRegisterScreen(
-                        namaMember: namaRegisterController.text,
-                        idMember: idMember,
-                      )),
-              (route) => false);
+          Navigator.push(
+            context,
+            PageTransition(
+              duration: Duration(milliseconds: 700),
+              type: PageTransitionType.fade,
+              // alignment: Alignment.centerLeft,
+              // child: RegisterPage(
+              //   haveName: false,
+              // ),
+              child: FilterRegisterScreen(
+                namaMember: _memberNama,
+                idMember: idMember,
+              ),
+            ),
+          );
+          // Navigator.of(context).pushAndRemoveUntil(
+          //     CupertinoPageRoute(
+          //         builder: (context) => FilterRegisterScreen(
+          //               namaMember: namaRegisterController.text,
+          //               idMember: idMember,
+          //             )),
+          //     (route) => false);
 
           // );
         });
         // void createAkun() async {
-        String nama = namaRegisterController.text;
         registerMemberAkun(namaRegisterController.text, idMember)
             .then((value) => {});
         // }
@@ -254,7 +272,12 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
-    namaRegisterController.text = widget.nama;
+    if (widget.nama != '') {
+      namaRegisterController.text = widget.nama;
+    } else {
+      namaRegisterController.text = '';
+    }
+    // namaRegisterController.text = widget.nama;
   }
 
   bool passwordVisibility = true;
@@ -365,6 +388,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           GestureDetector(
                             onTap: () {
+                              namaRegisterController.clear();
+                              noHpRegisterController.clear();
+                              emailRegisterController.clear();
                               Navigator.push(
                                 context,
                                 CupertinoPageRoute(

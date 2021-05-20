@@ -75,96 +75,64 @@ class _ListUserState extends State<ListUser> {
                             //   height: 14,
                             // ),
 
-                            widget.members.length <= 0
-                                ? Container(
-                                    child: Row(
-                                      children: [
-                                        Text("Data tidak ditemukan."),
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                duration:
-                                                    Duration(milliseconds: 700),
-                                                type: PageTransitionType
-                                                    .leftToRightWithFade,
-                                                child: RegisterPage(
-                                                  haveName: false,
-                                                ),
+                            Container(
+                              child: Container(
+                                color: Colors.white,
+                                margin: EdgeInsets.only(top: 24.0),
+                                // color: Colors.black,
+                                height: 500.0,
+                                width: 400.0,
+                                child: ListView.builder(
+                                    itemCount: null == widget.members
+                                        ? 0
+                                        : widget.members.length,
+                                    itemBuilder: (context, index) {
+                                      Member member = widget.members[index];
+                                      return ListTile(
+                                        leading: CircleAvatar(
+                                          foregroundColor: Colors.white,
+                                          radius: 25,
+                                          backgroundImage:
+                                              member.jk == 'Perempuan'
+                                                  ? AssetImage(
+                                                      'assets/images/women.png')
+                                                  : AssetImage(
+                                                      'assets/images/man.png'),
+                                        ),
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                              builder: (context) =>
+                                                  RegisterPage(
+                                                nama: member.nama,
+                                                id: member.idMember,
+                                                haveName: true,
                                               ),
-                                            );
-                                          },
-                                          child: Text(
-                                            " Daftar",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                : Container(
-                                    child: Container(
-                                      color: Colors.white,
-                                      margin: EdgeInsets.only(top: 24.0),
-                                      // color: Colors.black,
-                                      height: 500.0,
-                                      width: 400.0,
-                                      child: ListView.builder(
-                                          itemCount: null == widget.members
-                                              ? 0
-                                              : widget.members.length,
-                                          itemBuilder: (context, index) {
-                                            Member member =
-                                                widget.members[index];
-                                            return ListTile(
-                                              leading: CircleAvatar(
-                                                foregroundColor: Colors.white,
-                                                radius: 25,
-                                                backgroundImage: member.jk ==
-                                                        'Perempuan'
-                                                    ? AssetImage(
-                                                        'assets/images/women.png')
-                                                    : AssetImage(
-                                                        'assets/images/man.png'),
-                                              ),
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  CupertinoPageRoute(
-                                                    builder: (context) =>
-                                                        RegisterPage(
-                                                      nama: member.nama,
-                                                      id: member.idMember,
-                                                      haveName: true,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              hoverColor: Colors.black,
-                                              selected: true,
-                                              focusColor: Colors.black,
-                                              isThreeLine: true,
-                                              title: Text(
-                                                member.nama,
-                                                style: kTitleText,
-                                              ),
-                                              subtitle: Text(
-                                                'Wilayah :${member.wilayah}\nSektor: ${member.sektor}',
-                                                style: kDescriptionText,
-                                              ),
-                                              trailing: Icon(
-                                                Icons.keyboard_arrow_right,
-                                                color: Colors.black,
-                                              ),
-                                              dense: true,
-                                            );
-                                          }),
-                                    ),
-                                  ),
+                                            ),
+                                          );
+                                        },
+                                        hoverColor: Colors.black,
+                                        selected: true,
+                                        focusColor: Colors.black,
+                                        isThreeLine: true,
+                                        title: Text(
+                                          member.nama,
+                                          style: kTitleText,
+                                        ),
+                                        subtitle: Text(
+                                          'Wilayah :${member.wilayah}\nSektor: ${member.sektor}',
+                                          style: kDescriptionText,
+                                        ),
+                                        trailing: Icon(
+                                          Icons.keyboard_arrow_right,
+                                          color: Colors.black,
+                                        ),
+                                        dense: true,
+                                      );
+                                    }),
+                              ),
+                            ),
                             // Text('members', style: kBodyText2)
                           ],
                         ),
@@ -221,8 +189,6 @@ class _ListUserState extends State<ListUser> {
                                     child: CekDataPage(
                                         // members: members,
                                         )));
-
-                           
                           },
                           bgColor: Colors.black,
                           textColor: Colors.white),
