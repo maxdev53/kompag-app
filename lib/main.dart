@@ -69,9 +69,8 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<AppUpdateInfo> checkForUpdate() async {
     InAppUpdate.checkForUpdate().then((info) {
-     
       info?.updateAvailability == UpdateAvailability.updateAvailable
-          ? InAppUpdate.performImmediateUpdate()
+          ? InAppUpdate.completeFlexibleUpdate()
               .catchError((e) => showSnack(e.toString()))
           : null;
 
@@ -82,7 +81,6 @@ class _MyAppState extends State<MyApp> {
       showSnack(e.toString());
     });
   }
-
 
   void showSnack(String text) {
     if (_scaffoldKey.currentContext != null) {
@@ -125,7 +123,6 @@ class _MyAppState extends State<MyApp> {
     checkForUpdate();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -141,9 +138,7 @@ class _MyAppState extends State<MyApp> {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
-       
         body: SplashScreenView(
-         
           imageSrc: "assets/images/logo_maxpos.png",
           home: _isValidToken ? DashboardScreen() : WelcomePage(),
           duration: 2,

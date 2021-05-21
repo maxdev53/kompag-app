@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login_register_ui/config/palette.dart';
+import 'package:flutter_login_register_ui/custom_icons/custom_icons_icons.dart';
+import 'package:flutter_login_register_ui/fonts/my_flutter_app_icons.dart';
 import 'package:flutter_login_register_ui/screens/dashboard/news_screen.dart';
 import 'package:flutter_login_register_ui/screens/dashboard/toko/toko_screen.dart';
 import 'package:flutter_login_register_ui/screens/dashboard/home_screen.dart';
@@ -85,7 +87,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.grey,
           elevation: 0.0,
-          items: [Icons.home, Icons.person, Icons.new_releases, Icons.settings]
+          items: [Icons.home, Icons.person, Icons.notifications, Icons.settings]
               .asMap()
               .map(
                 (key, value) => MapEntry(

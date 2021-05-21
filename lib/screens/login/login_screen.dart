@@ -25,6 +25,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _usernameKey = GlobalKey<FormState>();
+  final _passwordKey = GlobalKey<FormState>();
+  int _attempLogin = 0;
   bool _saving = false;
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
@@ -59,84 +62,26 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Container(
                 child: Column(
                   children: <Widget>[
-                    Container(
-                      height: 400,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/loginIcon.png'),
-                            fit: BoxFit.fitWidth),
-                      ),
-                      child: Stack(
-                        children: <Widget>[
-                          Positioned(
-                            height: SizeConfig.safeBlockVertical *
-                                30, //10 for example
-                            width: SizeConfig.safeBlockHorizontal * 40,
-                            child: FadeAnimation(
-                              0.6,
-                              Container(
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/light-1.png'))),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            height: SizeConfig.safeBlockVertical *
-                                21, //10 for example
-                            width: SizeConfig.safeBlockHorizontal * 98,
-                            child: FadeAnimation(
-                              0.9,
-                              Container(
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/light-2.png'))),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            height: SizeConfig.safeBlockVertical *
-                                33, //10 for example
-                            width: SizeConfig.safeBlockHorizontal * 160,
-                            child: FadeAnimation(
-                              1.2,
-                              Container(
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/clock.png'))),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                              height: SizeConfig.safeBlockVertical *
-                                  55, //10 for example
-                              width: SizeConfig.safeBlockHorizontal * 103,
-                              child: FadeAnimation(
-                                1.3,
-                                Container(
-                                  child: Center(
-                                      // child: Text(
-                                      //   "login",
-                                      //   style: TextStyle(
-                                      //       fontWeight: FontWeight.normal,
-                                      //       color: Colors.white,
-                                      //       fontSize: 38),
-                                      // ),
-                                      ),
-                                ),
-                              ))
-                        ],
+                    FadeAnimation(
+                      1.0,
+                      Container(
+                        height: 380,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image:
+                                  AssetImage('assets/images/login_icon2.png'),
+                              fit: BoxFit.fitWidth),
+                        ),
                       ),
                     ),
                     FadeAnimation(
-                      1.6,
+                      1.2,
                       Container(
                         child: Center(
                           child: RoundedInputField(
-                            colorIcon: Color.fromRGBO(245, 58, 58, 1),
+                            formKey: _usernameKey,
+                            inputType: TextInputType.text,
+                            colorIcon: Colors.black,
                             controller: emailController,
                             hintText: "Email/No hp",
                           ),
@@ -145,19 +90,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: SizeConfig.safeBlockHorizontal * 1),
                     FadeAnimation(
-                      1.9,
+                      1.4,
                       Container(
                         child: Center(
                           child: RoundedPasswordField(
+                            formKey: _passwordKey,
                             controller: passwordController,
-                            colorIcon: Color.fromRGBO(245, 58, 58, 1),
+                            colorIcon: Colors.black,
                           ),
                         ),
                       ),
                     ),
                     SizedBox(height: size.height * 0.04),
                     FadeAnimation(
-                      2.2,
+                      1.6,
                       InkWell(
                         onTap: () => Navigator.push(
                           context,
@@ -169,90 +115,112 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         child: InkWell(
                           onTap: () async {
-                            setState(() {
-                              _saving = true;
-                            });
-                            // bl.display();
-                            var email = emailController.text;
-                            var password = passwordController.text;
-
-                            var jwt = await attemptLogin(email, password);
-                            // print(object)
-                            // bl.close();
-                            setState(() {
-                              _saving = false;
-                            });
-
-                            if (jwt != null) {
-                              var body = json.decode(jwt);
-                              //save shared preferences
-
-                              var token = body['data']['token'];
-                              // print(token);
-                              var nama = body['data']['name'];
-                              var memberId = body['data']['member_id'];
-                              // print(memberId);
-                              storage.write(key: 'token', value: token);
-                              storage.write(key: 'nama', value: nama);
-                              storage.write(key: 'memberId', value: memberId);
-
-                              // ToastBadge.show("Login berhasil",
-                              //     mode: ToastMode.INFO,
-                              //     duration: Duration(seconds: 2));
-                              //
-                              showToast('Login berhasil , tunggu ... ',
-                                  position: StyledToastPosition.top,
-                                  context: context,
-                                  duration: Duration(seconds: 2),
-                                  animation: StyledToastAnimation.fade);
-                              // }
-                              new Timer(const Duration(seconds: 2), () {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    CupertinoPageRoute(
-                                        builder: (context) =>
-                                            DashboardScreen()),
-                                    (route) => false);
-
-                                // );
-                              });
-                            } else {
-                              // CoolAlert.show(
-                              //     title: "Login gagal",
-                              //     context: context,
-                              //     type: CoolAlertType.error,
-                              //     text: "Username atau Password salah");
-                              // ToastBadge.show("Login gagal!",
-                              //     mode: ToastMode.ERROR,
-                              //     duration: Duration(seconds: 2));
-                              //
+                            if (_attempLogin > 3) {
                               showToast(
-                                  'Login gagal, cek data anda atau hubungi admin ! ',
+                                  'Anda melakukan kesalahan lebih dari 3x, harap hubungi admin ',
                                   position: StyledToastPosition.center,
                                   context: context,
-                                  duration: Duration(seconds: 2),
+                                  duration: Duration(seconds: 5),
                                   animation: StyledToastAnimation.fade);
+                            } else {
+                              if (_usernameKey.currentState.validate() &&
+                                  _passwordKey.currentState.validate()) {
+                                // await registerAkun();
+                                setState(() {
+                                  _saving = true;
+                                });
+                                // bl.display();
+                                var email = emailController.text;
+                                var password = passwordController.text;
+
+                                var jwt = await attemptLogin(email, password);
+                                // print(object)
+                                // bl.close();
+                                setState(() {
+                                  _saving = false;
+                                });
+
+                                if (jwt != null) {
+                                  var body = json.decode(jwt);
+                                  //save shared preferences
+
+                                  var token = body['data']['token'];
+                                  // print(token);
+                                  var nama = body['data']['name'];
+                                  var memberId = body['data']['member_id'];
+                                  // print(memberId);
+                                  storage.write(key: 'token', value: token);
+                                  storage.write(key: 'nama', value: nama);
+                                  storage.write(
+                                      key: 'memberId', value: memberId);
+
+                                  // ToastBadge.show("Login berhasil",
+                                  //     mode: ToastMode.INFO,
+                                  //     duration: Duration(seconds: 2));
+                                  //
+                                  setState(() {
+                                    _attempLogin = 0;
+                                  });
+                                  showToast('Login berhasil , tunggu ... ',
+                                      position: StyledToastPosition.top,
+                                      context: context,
+                                      duration: Duration(seconds: 2),
+                                      animation: StyledToastAnimation.fade);
+                                  // }
+                                  new Timer(const Duration(seconds: 2), () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        CupertinoPageRoute(
+                                            builder: (context) =>
+                                                DashboardScreen()),
+                                        (route) => false);
+
+                                    // );
+                                  });
+                                } else {
+                                  // CoolAlert.show(
+                                  //     title: "Login gagal",
+                                  //     context: context,
+                                  //     type: CoolAlertType.error,
+                                  //     text: "Username atau Password salah");
+                                  // ToastBadge.show("Login gagal!",
+                                  //     mode: ToastMode.ERROR,
+                                  //     duration: Duration(seconds: 2));
+                                  //
+                                  setState(() {
+                                    _attempLogin += 1;
+                                  });
+                                  showToast(
+                                      'Login gagal, cek data anda atau hubungi admin ! ',
+                                      position: StyledToastPosition.center,
+                                      context: context,
+                                      duration: Duration(seconds: 2),
+                                      animation: StyledToastAnimation.fade);
+                                }
+                              }
                             }
                           },
                           child: Container(
                             height: SizeConfig.safeBlockHorizontal * 13,
                             width: SizeConfig.safeBlockHorizontal * 86,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18),
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color.fromRGBO(245, 58, 58, 1),
-                                  Color.fromRGBO(245, 235, 235, .6)
-                                ],
+                                borderRadius: BorderRadius.circular(18),
+                                color: Colors.black
+                                // gradient: LinearGradient(
+                                //   colors: [
+                                //     Color.fromRGBO(8, 0, 0, 8),
+                                //     Color.fromRGBO(245, 235, 235, .6)
+                                //   ],
+                                // ),
+                                ),
+                            child: Center(
+                              child: Text(
+                                "Login",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
-                            child: Center(
-                                child: Text(
-                              "Login",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            )),
                           ),
                         ),
                       ),
@@ -260,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(height: size.height * 0.05),
                     // SizedBox(height: 70,),
                     FadeAnimation(
-                      2.8,
+                      1.8,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -291,6 +259,42 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    // SizedBox(height: size.height * 0.01),
+
+                    FadeAnimation(
+                      2.0,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          InkWell(
+                            onTap: () {
+                              // print("Register Tapped");
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  duration: Duration(milliseconds: 700),
+                                  type: PageTransitionType.bottomToTop,
+                                  // alignment: Alignment.centerLeft,
+                                  // child: RegisterPage(
+                                  //   haveName: false,
+                                  // ),
+                                  child: WelcomePage(
+                                      // haveName: false,
+                                      ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              "kembali",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.normal,
                               ),
                             ),
                           )

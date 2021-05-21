@@ -56,6 +56,21 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.label,
+                              color: Colors.grey,
+                              size: 20.0,
+                            ),
+                            Text(
+                              widget.informasi.kategori,
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          ],
+                        ),
                         SizedBox(
                           height: 10.0,
                         ),

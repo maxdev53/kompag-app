@@ -41,9 +41,6 @@ class _FilterRegisterScreenState extends State<FilterRegisterScreen> {
   @override
   Widget build(BuildContext context) {
     void _onComplete() async {
-      print("id :" + widget.idMember);
-      print("nama :" + widget.namaMember);
-      // print(widget.namaMember);
       var response = await Services.updateStatusMember(widget.idMember,
           _selectedOptionMarga, _selectedOptionPasangan, _selectedOptionCity);
       String nama = widget.namaMember;
@@ -338,7 +335,7 @@ class _FilterRegisterScreenState extends State<FilterRegisterScreen> {
                   ? _selectedOptionCity
                   : _selectedOptionPasangan,
           onChanged: (String v) {
-            print(v);
+            // print(v);
             setState(() {
               if (keterangan == 'marga') {
                 _selectedOptionMarga = v;

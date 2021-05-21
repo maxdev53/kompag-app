@@ -31,6 +31,8 @@ class _RegisterAkunState extends State<RegisterAkun> {
     noHpRegisterController.text = widget.noHp;
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   bool passwordVisibility = true;
   @override
   Widget build(BuildContext context) {
@@ -96,6 +98,7 @@ class _RegisterAkunState extends State<RegisterAkun> {
                             inputType: TextInputType.phone,
                           ),
                           MyPasswordField(
+                            formKey: _formKey,
                             isPasswordVisible: passwordVisibility,
                             onTap: () {
                               setState(() {
@@ -135,6 +138,8 @@ class _RegisterAkunState extends State<RegisterAkun> {
                       height: 20,
                     ),
                     MyTextButton(
+                        borderColor: Colors.white,
+
                       buttonName: 'Registrasi pertama',
                       onTap: () async {
                         var url = Uri.parse(

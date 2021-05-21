@@ -43,6 +43,24 @@ Widget listWidget(Informasi item) {
                 ),
                 Row(
                   children: [
+                    Icon(
+                      Icons.label,
+                      color: Colors.grey,
+                      size: 20.0,
+                    ),
+                    Text(
+                      item.kategori,
+                      style: TextStyle(
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 6.0,
+                ),
+                Row(
+                  children: [
                     Icon(Icons.person),
                     Text(
                       item.user,

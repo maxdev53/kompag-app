@@ -7,12 +7,14 @@ class MyTextButton extends StatelessWidget {
     @required this.buttonName,
     @required this.onTap,
     @required this.bgColor,
-    @required this.textColor,
+    @required this.textColor, 
+    @required this.borderColor,
   }) : super(key: key);
   final String buttonName;
   final Function onTap;
   final Color bgColor;
   final Color textColor;
+  final Color borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,7 @@ class MyTextButton extends StatelessWidget {
       height: 60,
       width: double.infinity,
       decoration: BoxDecoration(
+        border: Border.all(width: 2.0, color: borderColor),
         color: bgColor,
         borderRadius: BorderRadius.circular(18),
       ),

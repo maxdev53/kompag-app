@@ -1,18 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_register_ui/screens/register/filter_register_screen.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
-import '../widgets/widget.dart';
+
 import '../constants.dart';
+import '../widgets/widget.dart';
 import 'login/login_screen.dart';
 import 'screen.dart';
-import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatefulWidget {
   String nama = '';
@@ -34,7 +36,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _formKey1 = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
-  final _formKey3 = GlobalKey<FormState>();
+  // final _formKey3 = GlobalKey<FormState>();
   // final _formKey =
   Future<dynamic> registerAkun() async {
     setState(() {
@@ -83,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
         noHpRegisterController.clear();
         Timer(Duration(seconds: 3), () {
           FlutterOpenWhatsapp.sendSingleMessage("628111755827",
-              "Salam sejahtera  %0a Saya telah mengajukan pembuatan akun%0a atas nama $_namaPendaftar  %0a terimakasih");
+              "Salam sejahtera%0aSaya telah mengajukan pembuatan akun%0aNama : $_namaPendaftar%0aTerimakasih");
         });
         Timer(Duration(seconds: 1), () {
           Navigator.push(
@@ -229,7 +231,7 @@ class _RegisterPageState extends State<RegisterPage> {
           _memberNama = namaRegisterController.text;
         });
 
-        new Timer(const Duration(seconds: 2), () {
+        new Timer(const Duration(seconds: 1), () {
           Navigator.push(
             context,
             PageTransition(
@@ -442,6 +444,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       Container(
                         margin: EdgeInsets.all(6.0),
                         child: MyTextButton(
+                        borderColor: Colors.white,
+
                           buttonName:
                               widget.haveName ? 'Registrasi pertama' : 'Daftar',
                           onTap: () async {

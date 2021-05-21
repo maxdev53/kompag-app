@@ -177,6 +177,8 @@ class _ListUserState extends State<ListUser> {
                     Container(
                       margin: EdgeInsets.all(6.0),
                       child: MyTextButton(
+                        borderColor: Colors.white,
+
                           buttonName: 'Kembali',
                           onTap: () {
                             Navigator.push(

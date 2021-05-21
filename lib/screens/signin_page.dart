@@ -107,15 +107,15 @@ class _SignInPageState extends State<SignInPage> {
                             hintText: 'Email / No HP',
                             inputType: TextInputType.text,
                           ),
-                          MyPasswordField(
-                            controller: passwordController,
-                            isPasswordVisible: isPasswordVisible,
-                            onTap: () {
-                              setState(() {
-                                isPasswordVisible = !isPasswordVisible;
-                              });
-                            },
-                          ),
+                          // MyPasswordField(
+                          //   controller: passwordController,
+                          //   isPasswordVisible: isPasswordVisible,
+                          //   onTap: () {
+                          //     setState(() {
+                          //       isPasswordVisible = !isPasswordVisible;
+                          //     });
+                          //   },
+                          // ),
                         ],
                       ),
                     ),
@@ -148,6 +148,8 @@ class _SignInPageState extends State<SignInPage> {
                       height: 20,
                     ),
                     MyTextButton(
+                        borderColor: Colors.white,
+
                       buttonName: 'Masuk',
                       onTap: () async {
                         bl.display();

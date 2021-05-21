@@ -83,6 +83,8 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Expanded(
                       child: MyTextButton(
+                        borderColor: Colors.white,
+
                         bgColor: Color(0xffd9ced6),
                         buttonName: 'Cek storage',
                         onTap: () async {
@@ -94,6 +96,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Expanded(
                       child: MyTextButton(
+                        borderColor: Colors.white,
+
                         bgColor: Colors.transparent,
                         buttonName: 'Keluar',
                         onTap: () async {

@@ -62,7 +62,8 @@ class WelcomePage extends StatelessWidget {
                   children: [
                     Expanded(
                       child: MyTextButton(
-                        bgColor: Color(0xffb30000),
+                        borderColor: Colors.black,
+                        bgColor: Colors.white,
                         buttonName: 'Cek data anggota',
                         onTap: () {
                           Navigator.push(
@@ -75,19 +76,22 @@ class WelcomePage extends StatelessWidget {
                                       // haveName: false,
                                       )));
                         },
-                        textColor: Colors.white,
+                        textColor: Colors.black,
                       ),
                     ),
                     Expanded(
                       child: MyTextButton(
+                        borderColor: Colors.black,
                         bgColor: Colors.transparent,
                         buttonName: 'Login',
                         onTap: () {
                           Navigator.push(
                               context,
-                              CupertinoPageRoute(
-                                builder: (context) => LoginScreen(),
-                              ));
+                              PageTransition(
+                                  duration: Duration(milliseconds: 700),
+                                  type: PageTransitionType.topToBottom,
+                                  // alignment: Alignment.centerLeft,
+                                  child: LoginScreen()));
                         },
                         textColor: Colors.white,
                       ),

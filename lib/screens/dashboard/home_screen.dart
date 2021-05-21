@@ -78,21 +78,13 @@ class _HomeScreenState extends State<HomeScreen> {
   //   });
   //   return nama;
   // }
-  void getInformasi() async {
-    Services.getInformasi().then((informasis) {
-      setState(() {
-        _loading = false;
-        _informasis = informasis;
-      });
-    });
-  }
+  
 
   @override
   void initState() {
     getDataLogin();
     _loading = true;
 
-    getInformasi();
     // requestPhone();
     // checkPermissionPhone();
     // if

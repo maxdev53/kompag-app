@@ -102,12 +102,73 @@ class Services {
     }
   }
 
-  static Future<List<Informasi>> getInformasi() async {
+  static Future<List<Informasi>> getLatestInformation() async {
     try {
       final response = await http
           .get('https://apikompag.maxproitsolution.com/api/informasi-terbaru');
 
       if (response.statusCode == 200) {
+        var body = json.decode(response.body);
+        var responseBody = json.encode(body['data']);
+
+        final List<Informasi> informasi = informasiFromJson(responseBody);
+        return informasi;
+      } else {}
+    } catch (e) {}
+  }
+
+  static Future<List<Informasi>> getNewsInformation() async {
+    try {
+      final response = await http
+          .get('https://apikompag.maxproitsolution.com/api/informasi-terbaru');
+
+      if (response.statusCode == 200) {
+        var body = json.decode(response.body);
+        var responseBody = json.encode(body['data']);
+
+        final List<Informasi> informasi = informasiFromJson(responseBody);
+        return informasi;
+      } else {}
+    } catch (e) {}
+  }
+
+  static Future<List<Informasi>> getVotingInformation() async {
+    try {
+      final response = await http
+          .get('https://apikompag.maxproitsolution.com/api/informasi-voting');
+
+      if (response.statusCode == 200) {
+        var body = json.decode(response.body);
+        var responseBody = json.encode(body['data']);
+
+        final List<Informasi> informasi = informasiFromJson(responseBody);
+        return informasi;
+      } else {}
+    } catch (e) {}
+  }
+
+  static Future<List<Informasi>> getAnnouncementInformation() async {
+    try {
+      final response = await http
+          .get('https://apikompag.maxproitsolution.com/api/informasi-pengumuman');
+
+      if (response.statusCode == 200) {
+        var body = json.decode(response.body);
+        var responseBody = json.encode(body['data']);
+
+        final List<Informasi> informasi = informasiFromJson(responseBody);
+        return informasi;
+      } else {}
+    } catch (e) {}
+  }
+
+  static Future<List<Informasi>> getInvitationInformation() async {
+    try {
+      final response = await http
+          .get('https://apikompag.maxproitsolution.com/api/informasi-undangan');
+
+      if (response.statusCode == 200) {
+        // print(response.body);
         var body = json.decode(response.body);
         var responseBody = json.encode(body['data']);
 

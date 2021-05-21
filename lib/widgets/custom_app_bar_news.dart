@@ -65,6 +65,7 @@ class _CustomAppBarNewsState extends State<CustomAppBarNews>
       ),
       bottom: PreferredSize(
         child: TabBar(
+          indicatorPadding: EdgeInsets.all(4.0),
           // unselectedLabelColor: Colors.grey[350],
           indicatorColor: Colors.black,
           labelColor: Colors.white,

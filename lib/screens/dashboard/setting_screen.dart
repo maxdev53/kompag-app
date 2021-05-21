@@ -30,6 +30,10 @@ class _SettingScreenState extends State<SettingScreen> {
   bool isPasswordVisibleConfirm = true;
   bool _saving = false;
 
+  final _oldPasswordKey = GlobalKey<FormState>();
+  final _newPasswordKey = GlobalKey<FormState>();
+  final _confirmPasswordKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -93,65 +97,6 @@ class _SettingScreenState extends State<SettingScreen> {
                 SizedBox(
                   height: screenHeight * 0.02,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    FlatButton.icon(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20.0),
-                        onPressed: () async {
-                          setState(() {
-                            _saving = true;
-                          });
-
-                          var res = await Services.logOut();
-                          if (res) {
-                            await storage.deleteAll();
-                            SharedPreferences preferences =
-                                await SharedPreferences.getInstance();
-                            await preferences.clear();
-                            new Future.delayed(new Duration(seconds: 2), () {
-                              showToast('Akun anda berhasil keluar ',
-                                  position: StyledToastPosition.top,
-                                  context: context,
-                                  duration: Duration(seconds: 4),
-                                  animation: StyledToastAnimation.fade);
-                              setState(() {
-                                _saving = false;
-                              });
-                              Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => WelcomePage(
-                                      // pageIndex: 1,
-                                      // memberDetail: _memberDetail
-                                      ),
-                                ),
-                              );
-                            });
-                          } else {
-                            setState(() {
-                              _saving = false;
-                            });
-                            showToast('Gagal , gangguan server ',
-                                position: StyledToastPosition.center,
-                                context: context,
-                                duration: Duration(seconds: 2),
-                                animation: StyledToastAnimation.fade);
-                          }
-                        },
-                        icon: const Icon(Icons.featured_play_list,
-                            color: Colors.black),
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        label: Text('Keluar', style: Styles.buttonTextStyle),
-                        textColor: Colors.black)
-                  ],
-                ),
-                Row(
-                  children: <Widget>[],
-                )
               ],
             )
           ],
@@ -185,6 +130,7 @@ class _SettingScreenState extends State<SettingScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               MyPasswordField(
+                formKey: _oldPasswordKey,
                 hintText: "Password Lama",
                 controller: oldPasswordController,
                 isPasswordVisible: isPasswordVisible,
@@ -197,6 +143,7 @@ class _SettingScreenState extends State<SettingScreen> {
               // isLoading ? Text('') : CircularProgressIndicator(),
               MyPasswordField(
                 hintText: "Password baru",
+                formKey: _newPasswordKey,
                 controller: newPasswordController,
                 isPasswordVisible: isPasswordVisibleNew,
                 onTap: () {
@@ -206,6 +153,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 },
               ),
               MyPasswordField(
+                formKey: _confirmPasswordKey,
                 hintText: "Konfirmasi password",
                 controller: confirmPasswordController,
                 isPasswordVisible: isPasswordVisibleConfirm,
@@ -238,56 +186,128 @@ class _SettingScreenState extends State<SettingScreen> {
               // )
               Center(
                 child: MyTextButton(
+                    borderColor: Colors.white,
                     bgColor: Colors.redAccent,
                     buttonName: 'Ubah password',
                     onTap: () async {
-                      setState(() {
-                        _saving = true;
-                      });
                       String oldPw = oldPasswordController.text;
                       String newPw = newPasswordController.text;
                       String confirmPw = confirmPasswordController.text;
+                      if (oldPw.isEmpty || newPw.isEmpty || confirmPw.isEmpty) {
+                        showToast('Harap isi data yang kosong',
+                            context: context,
+                            position: StyledToastPosition.bottom,
+                            animation: StyledToastAnimation.scale);
+                      } else if (newPw != confirmPw) {
+                        showToast('Password baru dan konfirmasi tidak cocok',
+                            context: context,
+                            position: StyledToastPosition.bottom,
+                            animation: StyledToastAnimation.scale);
+                      } else {
+                        setState(() {
+                          _saving = true;
+                        });
+                        Services.changePassword(oldPw, newPw, confirmPw)
+                            .then((data) => {
+                                  print(data),
+                                  setState(() => {_saving = false}),
+                                  if (data != false)
+                                    {
+                                      showToast('Password berhasil diubah',
+                                          context: context,
+                                          position: StyledToastPosition.bottom,
+                                          animation:
+                                              StyledToastAnimation.scale),
+                                      // QueenAlertsContiner(child: Prompt)
+                                      oldPasswordController.clear(),
+                                      newPasswordController.clear(),
+                                      confirmPasswordController.clear()
+                                    }
+                                  else
+                                    {
+                                      showToast('Password gagal diubah',
+                                          position: StyledToastPosition.bottom,
+                                          context: context,
+                                          animation: StyledToastAnimation.scale)
+                                    }
+                                });
+                      }
 
-                      Services.changePassword(oldPw, newPw, confirmPw)
-                          .then((data) => {
-                                print(data),
-                                setState(() => {_saving = false}),
-                                if (data != false)
-                                  {
-                                    showToast('Password berhasil diubah',
-                                        context: context,
-                                        position: StyledToastPosition.bottom,
-                                        animation: StyledToastAnimation.scale),
-                                    // QueenAlertsContiner(child: Prompt)
-                                    oldPasswordController.clear(),
-                                    newPasswordController.clear(),
-                                    confirmPasswordController.clear()
-                                  }
-                                else
-                                  {
-                                    showToast('Password gagal diubah',
-                                        position: StyledToastPosition.bottom,
-                                        context: context,
-                                        animation: StyledToastAnimation.scale)
-                                  }
-                                // print(data),
-                                // namaController.clear(),
-
-                                // Navigator.push(
-                                //   context,
-                                //   CupertinoPageRoute(
-                                //     builder: (context) => BottomNavScreen(
-                                //         // members: members,
-                                //         ),
-                                //   ),
-                                // ),
-
-                                // print(members)
-                              });
                       // response = await dio.post(url);
                     },
                     // bgColor: Color(0xffd9ced6),
                     textColor: Colors.white),
+              ),
+              SizedBox(
+                height: screenHeight * 0.008,
+              ),
+              Center(
+                child: Container(
+                  // height: 200.0,
+                  // width: 100.0,
+                  // decoration: BoxDecoration(
+                  // border: Border.all(width: 2.0),
+                  // color: Colors.red,
+                  // borderRadius: BorderRadius.circular(18)),
+                  // padding: EdgeInsets.only(right: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      FlatButton.icon(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          onPressed: () async {
+                            setState(() {
+                              _saving = true;
+                            });
+
+                            var res = await Services.logOut();
+                            if (res) {
+                              await storage.deleteAll();
+                              SharedPreferences preferences =
+                                  await SharedPreferences.getInstance();
+                              await preferences.clear();
+                              new Future.delayed(new Duration(seconds: 2), () {
+                                showToast('Akun anda berhasil keluar ',
+                                    position: StyledToastPosition.top,
+                                    context: context,
+                                    duration: Duration(seconds: 4),
+                                    animation: StyledToastAnimation.fade);
+                                setState(() {
+                                  _saving = false;
+                                });
+                                Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => WelcomePage(
+                                        // pageIndex: 1,
+                                        // memberDetail: _memberDetail
+                                        ),
+                                  ),
+                                );
+                              });
+                            } else {
+                              setState(() {
+                                _saving = false;
+                              });
+                              showToast('Gagal , gangguan server ',
+                                  position: StyledToastPosition.center,
+                                  context: context,
+                                  duration: Duration(seconds: 2),
+                                  animation: StyledToastAnimation.fade);
+                            }
+                          },
+                          icon: const Icon(Icons.exit_to_app,
+                              color: Colors.white),
+                          color: Colors.black,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          label: Text('Keluar', style: Styles.buttonTextStyle),
+                          textColor: Colors.white)
+                    ],
+                  ),
+                ),
               )
             ],
           )
