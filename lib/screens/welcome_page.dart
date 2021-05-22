@@ -70,7 +70,7 @@ class WelcomePage extends StatelessWidget {
                               context,
                               PageTransition(
                                   duration: Duration(milliseconds: 700),
-                                  type: PageTransitionType.rightToLeftWithFade,
+                                  type: PageTransitionType.leftToRightWithFade,
                                   // alignment: Alignment.centerLeft,
                                   child: CekDataPage(
                                       // haveName: false,

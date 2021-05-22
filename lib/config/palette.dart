@@ -4,4 +4,5 @@ import 'package:colour/colour.dart';
 
 class Palette {
   static Color primaryColor = Colour('#ed0e0e');
+  static Color greyColor = Colors.grey[300];
 }

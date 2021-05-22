@@ -30,6 +30,7 @@ class Services {
         uri + 'auth/logout',
         headers: headers,
       );
+      print(response.statusCode);
       if (response.statusCode == 200) {
         // final Marga marga = margaFromJson(response.body);
         // return marga;
@@ -149,8 +150,8 @@ class Services {
 
   static Future<List<Informasi>> getAnnouncementInformation() async {
     try {
-      final response = await http
-          .get('https://apikompag.maxproitsolution.com/api/informasi-pengumuman');
+      final response = await http.get(
+          'https://apikompag.maxproitsolution.com/api/informasi-pengumuman');
 
       if (response.statusCode == 200) {
         var body = json.decode(response.body);

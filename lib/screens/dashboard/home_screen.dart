@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login_register_ui/models/informasi.dart';
 import 'package:flutter_login_register_ui/models/member_detail.dart';
 import 'package:flutter_login_register_ui/models/services.dart';
+import 'package:flutter_login_register_ui/screens/dashboard/news_screen.dart';
 // import 'package:flutter_login_register_ui/screens/screens.dart';
 // import 'package:flutter_login_register_ui/screens/welcome_page.dart';
 import 'package:flutter_login_register_ui/services/shared_pref.dart';
+import 'package:flutter_login_register_ui/widgets/expanded_bottom.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_login_register_ui/config/palette.dart';
 // import 'package:flutter_login_register_ui/config/styles.dart';
@@ -78,7 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
   //   });
   //   return nama;
   // }
-  
 
   @override
   void initState() {
@@ -91,10 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // sharedPref.save('memberDetail', _memberDetailSave);
     // print(_member);
     super.initState();
-    
   }
 
-  
   Future<bool> _onBackPressed() {
     return showDialog(
           context: context,
@@ -133,13 +132,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        appBar: CustomAppBar( color: Palette.primaryColor),
+        appBar: CustomAppBar(color: Palette.primaryColor),
         body: CustomScrollView(
           physics: ClampingScrollPhysics(),
           slivers: [
             _buildHeader(screenHeight),
             _buildPosTips(screenHeight),
             _buildDetail(screenHeight),
+            // _buildExpandedBottom(screenHeight),
             // _buildHotPromo(screenHeight),
           ],
         ),
@@ -160,7 +160,6 @@ class _HomeScreenState extends State<HomeScreen> {
 // List<Widget> widgets = _informasis.map((name) => new Text(name.gambarIsi)).toList();
   // List<Informasi> _informasis;
   Widget gambar() {
-    
     return new Column(
         // Informasis informasis = informasis;
         children: _informasis
@@ -231,8 +230,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 //             vertical: 10.0, horizontal: 20.0),
                 //         onPressed: () async {
                 //           // final prefs = await SharedPreferences.getInstance();
-
-              
               ],
             )
           ],
@@ -408,5 +405,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  SliverToBoxAdapter _buildExpandedBottom(double screenHeight) {
+    return SliverToBoxAdapter(
+        child: Container(
+            height: screenHeight * 0.8,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: NewsScreen(),
+            )));
   }
 }

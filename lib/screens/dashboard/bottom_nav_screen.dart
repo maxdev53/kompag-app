@@ -6,7 +6,7 @@ import 'package:flutter_login_register_ui/screens/dashboard/news_screen.dart';
 import 'package:flutter_login_register_ui/screens/dashboard/toko/toko_screen.dart';
 import 'package:flutter_login_register_ui/screens/dashboard/home_screen.dart';
 import 'package:flutter_login_register_ui/screens/dashboard/profile_screen.dart';
-import 'package:flutter_login_register_ui/screens/dashboard/setting_screen.dart';
+import 'package:flutter_login_register_ui/screens/dashboard/profile_menu_screen.dart';
 import 'package:get/get.dart';
 
 class BottomNavScreen extends StatefulWidget {
@@ -24,7 +24,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     // BarangScreen(),
     ProfilScreen(),
     NewsScreen(),
-    SettingScreen(),
+    ProfileScreen(),
   ];
 
   int _currentIndex = 0;
@@ -87,7 +87,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.grey,
           elevation: 0.0,
-          items: [Icons.home, Icons.person, Icons.notifications, Icons.settings]
+          items: [Icons.home, Icons.person, Icons.notifications, Icons.person]
               .asMap()
               .map(
                 (key, value) => MapEntry(
