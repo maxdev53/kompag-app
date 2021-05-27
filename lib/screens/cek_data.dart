@@ -44,7 +44,7 @@ class _CekDataPageState extends State<CekDataPage> {
   String margaId;
   List _marga;
 
-  final String uri = 'https://apikompag.maxproitsolution.com/api';
+  final String uri = 'https://maxproitsolution.com/apikompag/api';
   Future<String> getMarga() async {
     var res = await http.get(Uri.parse("$uri/statistik/select-marga"));
     var resBody = json.decode(res.body);

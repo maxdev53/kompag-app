@@ -1,65 +1,69 @@
-import 'dart:convert';
-
+import 'package:colour/colour.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-import 'package:flutter_login_register_ui/models/informasi.dart';
-import 'package:flutter_login_register_ui/models/member_detail.dart';
-import 'package:flutter_login_register_ui/models/services.dart';
-import 'package:flutter_login_register_ui/screens/dashboard/news_screen.dart';
-// import 'package:flutter_login_register_ui/screens/screens.dart';
-// import 'package:flutter_login_register_ui/screens/welcome_page.dart';
-import 'package:flutter_login_register_ui/services/shared_pref.dart';
-import 'package:flutter_login_register_ui/widgets/expanded_bottom.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_login_register_ui/config/palette.dart';
 // import 'package:flutter_login_register_ui/config/styles.dart';
 import 'package:flutter_login_register_ui/data/data.dart';
+// import 'package:flutter/services.dart';
+import 'package:flutter_login_register_ui/models/informasi.dart';
+import 'package:flutter_login_register_ui/models/latest_status.dart';
+import 'package:flutter_login_register_ui/models/member_detail.dart';
+import 'package:flutter_login_register_ui/models/services.dart';
+import 'package:flutter_login_register_ui/screens/dashboard/news_screen.dart';
+import 'package:flutter_login_register_ui/screens/status/post_status_screen.dart';
+// import 'package:flutter_login_register_ui/screens/screens.dart';
+// import 'package:flutter_login_register_ui/screens/welcome_page.dart';
+import 'package:flutter_login_register_ui/services/shared_pref.dart';
+import 'package:flutter_login_register_ui/widgets/feed_box.dart';
 import 'package:flutter_login_register_ui/widgets/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:pk_skeleton/pk_skeleton.dart';
+import 'package:pop_bottom_menu/pop_bottom_menu.dart';
+
 // import 'package:get/get.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key key}) : super(key: key);
+  Function decrementStatus;
+  int latestStatus;
+  int decrement = 0;
+
+  HomeScreen({Key key, this.latestStatus, this.decrement, this.decrementStatus})
+      : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _statusForm = new GlobalKey<FormState>();
   SharedPref sharedPref = SharedPref();
   String _nama = '';
+  // bool _loading = false;
+  List<LatestStatus> _latestStatus;
   String _memberId;
   String _noHp;
   String _mobileNumber;
   // List<SimCard> _simCard = <SimCard>[];
   MemberDetail _memberDetailSave = MemberDetail();
   List<Informasi> _informasis;
-  bool _loading;
+  bool _loading = false;
 
-  // void requestPhone() async {
-  //   var data = await MobileNumber.requestPhonePermission;
-  //   // print(data);
-  //   // return data;
-  // }
-
-  // Future<dynamic> checkPermissionPhone() async {
-  //   var data = await MobileNumber.hasPhonePermission;
-  //   print(data);
-  //   if (data) {
-  //     final String phoneNumber = await MobileNumber.mobileNumber;
-  //     // print(phoneNumber);
-  //     setState(() {
-  //       _noHp = phoneNumber;
-  //     });
-  //   } else {
-  //     requestPhone();
-  //   }
-  //   // print(data);
-  //   // return data;
-  // }
+  List<String> avatarUrl = [
+    "https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80",
+    "https://images.unsplash.com/photo-1457449940276-e8deed18bfff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+    "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1525879000488-bff3b1c387cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80",
+  ];
+  List<String> storyUrl = [
+    "https://images.unsplash.com/photo-1600055882386-5d18b02a0d51?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=621&q=80",
+    "https://images.unsplash.com/photo-1600174297956-c6d4d9998f14?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80",
+    "https://images.unsplash.com/photo-1600008646149-eb8835bd979d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=666&q=80",
+    "https://images.unsplash.com/photo-1502920313556-c0bbbcd00403?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80",
+  ];
 
   // @override
   Future<String> getDataLogin() async {
@@ -73,6 +77,23 @@ class _HomeScreenState extends State<HomeScreen> {
     return nama;
   }
 
+  Future<List> getStatus() async {
+    setState(() {
+      _loading = true;
+    });
+
+    List data = await Services.getLatestStatus();
+    // print(data.length);
+
+    // print(_dataInformasiUndangan.length);
+    setState(() {
+      _loading = false;
+      _latestStatus = data;
+    });
+    // print(data);
+    return data;
+  }
+
   // Future<String> get() async {
   //   String nama = await storage.read(key: 'nama');
   //   setState(() {
@@ -83,7 +104,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    // widget.decrement ==
     getDataLogin();
+    getStatus();
     _loading = true;
 
     // requestPhone();
@@ -122,6 +145,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget build(BuildContext context) {
+    // print("build " + widget.latestStatus.toString());
+    int updatedStatusLength = (widget.latestStatus != null)
+        ? _latestStatus.length - 1
+        : (_latestStatus == null)
+            ? 3
+            : _latestStatus.length;
+
     final screenHeight = MediaQuery.of(context).size.height;
     // List<Widget> widgets = _simCard
     //     .map((SimCard sim) => Text(
@@ -132,27 +162,53 @@ class _HomeScreenState extends State<HomeScreen> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
+        backgroundColor: Colour("#D7DBDD"),
         appBar: CustomAppBar(color: Palette.primaryColor),
+        // body: Column(
+        //   children: <Widget>[
+        //     Container(
+        //       width: double.infinity,
+        //       decoration: BoxDecoration(
+        //           color: Colors.black,
+        //           borderRadius: BorderRadius.circular(12.0)),
+        //       child: Padding(
+        //         padding:
+        //             const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+        //         child: Row(
+        //           children: [
+        //             CircleAvatar(
+        //               radius: 25.0,
+        //               backgroundImage: AssetImage("assets/images/man.png"),
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     )
+        //   ],
+        // ),
+
         body: CustomScrollView(
           physics: ClampingScrollPhysics(),
           slivers: [
             _buildHeader(screenHeight),
-            _buildPosTips(screenHeight),
-            _buildDetail(screenHeight),
+            _buildTextBar(screenHeight),
+            _buildTimeLine(screenHeight)
+            // _buildPosTips(screenHeight),
+            // _buildDetail(screenHeight),
             // _buildExpandedBottom(screenHeight),
             // _buildHotPromo(screenHeight),
           ],
         ),
-        // drawer: Drawer(
-        //   // child: ListView(
-        //   //   children: <Widget>[
-        //   //     UserAccountsDrawerHeader(
-        //   //       accountName: Text('hi'),
-        //   //       accountEmail: Text('hello'),
-        //   //     )
-        //   //   ],
-        //   // ),
-        // ),
+        drawer: Drawer(
+            // child: ListView(
+            //   children: <Widget>[
+            //     UserAccountsDrawerHeader(
+            //       accountName: Text('hi'),
+            //       accountEmail: Text('hello'),
+            //     )
+            //   ],
+            // ),
+            ),
       ),
     );
   }
@@ -178,6 +234,149 @@ class _HomeScreenState extends State<HomeScreen> {
             .toList());
   }
 
+  SliverList _buildTimeLine(double screenHeight) {
+    // print(widget.latestStatus.length);
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, index) {
+          // print(_latestStatus);
+          return _loading
+              ? Container(
+                  height: 300.0,
+                  width: 200.0,
+                  child: PKCardListSkeleton(
+                    isCircularImage: false,
+                    isBottomLinesActive: true,
+                    length: 8,
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(right: 10.0, left: 10.0),
+                  child:
+                      // FeedBoxWidget(avatarUrl: ,)
+                      FeedBoxWidget(
+                    listStatus: _latestStatus,
+                    avatarUrl: avatarUrl[0],
+                    userName: _latestStatus[index].nama,
+                    date: _latestStatus[index].waktu,
+                    contentText: _latestStatus[index].status,
+                    contentImg: '',
+                    like: _latestStatus[index].countLike,
+                    comment: _latestStatus[index].countComment,
+                    id: _latestStatus[index].id,
+                  ),
+                );
+          // return feedBox(avatarUrl[index], "Doctor code", "6 min",
+          //     "I just wrote something", "");
+        },
+        childCount: _loading ? 3 : _latestStatus.length,
+      ),
+    );
+    // SliverList(
+    //   child: Padding(
+    //     padding: EdgeInsets.all(10.0),
+    //     // child: ListView.builder(
+    //     //   itemCount: 3,
+    //     //   itemBuilder: (context, index) {
+    //     //     return Flexible(
+    //     //       child: InkWell(
+    //     //           onTap: () => {
+    //     //                 // print(index),
+    //     //                 // Navigator.push(
+    //     //                 //     context,
+    //     //                 //     MaterialPageRoute(
+    //     //                 //         builder: (context) => DetailNewsScreen(
+    //     //                 //             kategori: _latestStatus[index]
+    //     //                 //                 .kategori,
+    //     //                 //             informasi:
+    //     //                 //                 _latestStatus[index])))
+    //     //               },
+    //     //           child: Column(
+    //     //             children: [
+    //     //               // feedBox(
+    //     //               //     avatarUrl[0],
+    //     //               //     _latestStatus[index].nama,
+    //     //               //     _latestStatus[index].waktu,
+    //     //               //     _latestStatus[index].status,
+    //     //               //     '')
+
+    //     //               feedBox(avatarUrl[0], "Doctor code", "6 min",
+    //     //                   "I just wrote something", ""),
+    //     //               feedBox(avatarUrl[1], "Joseph Joestar", "6 min",
+    //     //                   "It's pretty good I like it", storyUrl[2]),
+    //     //               feedBox(avatarUrl[2], "Giorno giovana", "Yesterday",
+    //     //                   "I'm Giorno Giovana and I have a Dream", storyUrl[1]),
+    //     //             ],
+    //     //           )),
+    //     //     );
+    //     //   },
+  }
+
+  SliverToBoxAdapter _buildTextBar(double screenHeight) {
+    return SliverToBoxAdapter(
+        child: Padding(
+      padding: const EdgeInsets.only(
+          top: 20.0, bottom: 20.0, right: 10.0, left: 10.0),
+      child: Column(
+        children: <Widget>[
+          Container(
+            // color: Colors.transparent,
+            // padding: EdgeInsets.all(20.0),
+            width: double.infinity,
+            decoration: BoxDecoration(
+                color: Colour("#F7F9F9"),
+                borderRadius: BorderRadius.circular(22.0)),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 25.0,
+                    backgroundImage: AssetImage("assets/images/man.png"),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                              duration: Duration(milliseconds: 500),
+                              type: PageTransitionType.leftToRight,
+                              child: PostStatusScreen(
+                                nama: _nama,
+                              )),
+                        );
+                      },
+                      child: Container(
+                          // height: 200.0,
+                          // width: double.infinity,
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Apa yanga anda pikirkan ?"),
+                          Container(
+                            margin: EdgeInsets.only(right: 18.0),
+                            child: Icon(
+                              Icons.share,
+                            ),
+                          )
+                        ],
+                      )),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    ));
+  }
+
   SliverToBoxAdapter _buildHeader(double screenHeight) {
     return SliverToBoxAdapter(
       child: Container(
@@ -196,7 +395,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Hi , $_nama',
                   style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 30.0,
+                      fontSize: 20.0,
                       fontWeight: FontWeight.bold),
                 )
               ],
@@ -211,25 +410,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Selamat datang di aplikasi Kompag',
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.w600),
+                      fontSize: 26.0,
+                      fontWeight: FontWeight.normal),
                 ),
-                Text('...',
-                    style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w300)),
-                SizedBox(
-                  height: screenHeight * 0.02,
-                ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: <Widget>[
-                //     FlatButton.icon(
-                //         padding: const EdgeInsets.symmetric(
-                //             vertical: 10.0, horizontal: 20.0),
-                //         onPressed: () async {
-                //           // final prefs = await SharedPreferences.getInstance();
               ],
             )
           ],
@@ -295,56 +478,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           )
                           .toList()),
                 )),
-          ],
-        ),
-      ),
-    );
-  }
-
-  SliverToBoxAdapter _buildHotPromo(double screenHeight) {
-    return SliverToBoxAdapter(
-      child: Container(
-        padding: const EdgeInsets.all(20.0),
-        // color: Colors.orange,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Info terbaru',
-              style: const TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(
-              height: 20.0,
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-              child: Container(
-                height: 300.0,
-                width: 400.0,
-                // padding: EdgeInsets.only(right: 8),
-                // padding: EdgeInsets.all(30),
-                // margin: EdgeInsets.all(4),
-                child: ListView.builder(
-                    // widget.usernames.length != null ? widget.usernames.length : 0;
-                    itemCount: _loading ? 0 : _informasis.length,
-                    itemBuilder: (context, index) {
-                      Informasi informasi = _informasis[index];
-                      return ListTile(
-                        title: Text(informasi.judul),
-                        // subtitle: Text(informasi.konten),
-                      );
-                    }),
-              ),
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
-            // Column(children: widgets)
-            // fillCards();
           ],
         ),
       ),

@@ -138,12 +138,11 @@ class _RegisterAkunState extends State<RegisterAkun> {
                       height: 20,
                     ),
                     MyTextButton(
-                        borderColor: Colors.white,
-
+                      borderColor: Colors.white,
                       buttonName: 'Registrasi pertama',
                       onTap: () async {
                         var url = Uri.parse(
-                            'https://apikompag.maxproitsolution.com/api/anggota/registrasi/pertama');
+                            'https://maxproitsolution.com/apikompag/api/anggota/registrasi/pertama');
                         var response = await http.post(url, body: {
                           'member_id': widget.id,
                           'no_hp': noHpRegisterController.text,

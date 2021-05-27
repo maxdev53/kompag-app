@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:colour/colour.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login_register_ui/config/palette.dart';
 // import 'package:flutter_login_register_ui/config/palette.dart';
 import 'package:flutter_login_register_ui/helpers/storage.dart';
 import 'package:flutter_login_register_ui/router.dart';
@@ -17,7 +19,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter_login_register_ui/screens/dashboard/main.dart';
 
-const URI = 'https://apikompag.maxproitsolution.com/api';
+const URI = 'https://maxproitsolution.com/apikompag/api';
 final storage = FlutterSecureStorage();
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
@@ -95,7 +97,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<String> checkValidToken(String token) async {
-    String url = 'https://apikompag.maxproitsolution.com/api/auth/checkToken';
+    String url = 'https://maxproitsolution.com/apikompag/api/auth/checkToken';
     // String token = await storage.read(key: 'token');
     Map<String, String> headers = {
       "Content-Type": "application/json",
@@ -134,7 +136,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
         scaffoldBackgroundColor: Colors.white,
-        primarySwatch: Colors.red,
+        // primarySwatch: Colour("#D8C8C5"),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(

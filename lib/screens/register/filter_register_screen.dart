@@ -4,6 +4,8 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:cool_stepper/cool_stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:flutter_login_register_ui/config/palette.dart';
 // import 'package:flutter/services.dart';
 import 'package:flutter_login_register_ui/models/services.dart';
 import 'package:flutter_login_register_ui/screens/screen.dart';
@@ -164,7 +166,7 @@ class _FilterRegisterScreenState extends State<FilterRegisterScreen> {
           return null;
         },
         title: 'Keterangan tempat tinggal',
-        subtitle: 'Apakah anda tinggal di Kabodetabek ?',
+        subtitle: 'Apakah anda tinggal di Jabodetabek ?',
         // alignment: Alignment.center,
         content: Container(
           child: Row(
@@ -189,7 +191,7 @@ class _FilterRegisterScreenState extends State<FilterRegisterScreen> {
     final stepper = CoolStepper(
       config: const CoolStepperConfig(
           // headerColor: Colors.w,
-          headerColor: Colors.black,
+          headerColor: Colors.red,
           iconColor: Colors.white,
           nextText: 'selanjutnya',
           titleTextStyle: TextStyle(
@@ -209,72 +211,76 @@ class _FilterRegisterScreenState extends State<FilterRegisterScreen> {
       steps: steps,
     );
     final screenHeight = MediaQuery.of(context).size.height;
+    var clipPathHeader = ClipPath(
+      clipper: WaveClipperTwo(),
+      child: Container(
+        height: 100.0,
+        color: Colors.red,
+      ),
+    );
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       // appBar: CustomAppBar(color: Colors.black),
-      body: Container(
-        // color: Colors.white,
-        height: 740.0,
-        width: 600.0,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(200.0),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          margin: EdgeInsets.only(top: 30.0),
+          // color: Colors.white,
+          height: 800.0,
+          width: 600.0,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(200.0),
 
-            // bottomRight: Radius.circular(45.0)
+              // bottomRight: Radius.circular(45.0)
+            ),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Row(
-            //   children: <Widget>[
-            //     Text(
-            //       'Maxpos',
-            //       style: const TextStyle(
-            //           color: Colors.white,
-            //           fontSize: 30.0,
-            //           fontWeight: FontWeight.bold),
-            //     )
-            //   ],
-            // ),
-            SizedBox(
-              height: screenHeight * 0.0005,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(left: 20.0),
-                  child: Text(
-                    'Pendaftaran lanjutan',
-                    // textAlign: TextAlign.right,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.w600),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Row(
+              //   children: <Widget>[
+              //     Text(
+              //       'Maxpos',
+              //       style: const TextStyle(
+              //           color: Colors.white,
+              //           fontSize: 30.0,
+              //           fontWeight: FontWeight.bold),
+              //     )
+              //   ],
+              // ),
+              SizedBox(
+                height: screenHeight * 0.0005,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(left: 20.0),
                   ),
-                ),
-                // Text('Update data',
-                //     style: TextStyle(
-                //         color: Colors.white70,
-                //         fontSize: 15.0,
-                //         fontWeight: FontWeight.w300)),
-                SizedBox(
-                  height: screenHeight * 0.06,
-                ),
-                Container(
-                  height: 500.0,
-                  width: 500.0,
-                  child: stepper,
-                ),
-                SizedBox(
-                  height: screenHeight * 0.08,
-                ),
-              ],
-            ),
-          ],
+                  clipPathHeader,
+                  // Text('Update data',
+                  //     style: TextStyle(
+                  //         color: Colors.white70,
+                  //         fontSize: 15.0,
+                  //         fontWeight: FontWeight.w300)),
+                  SizedBox(
+                    height: screenHeight * 0.06,
+                  ),
+                  Container(
+                    height: 500.0,
+                    width: 500.0,
+                    child: stepper,
+                  ),
+                  SizedBox(
+                    height: screenHeight * 0.08,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -315,7 +321,7 @@ class _FilterRegisterScreenState extends State<FilterRegisterScreen> {
         duration: Duration(milliseconds: 200),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
-          color: isActive ? Colors.black : Colors.white,
+          color: isActive ? Colors.red : Colors.white,
           border: Border.all(
             width: 0,
           ),

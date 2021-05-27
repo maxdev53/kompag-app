@@ -44,7 +44,6 @@ class _ProfilScreenState extends State<ProfilScreen> {
   final _formKey7 = GlobalKey<FormState>();
   final _formKey8 = GlobalKey<FormState>();
 
-
   TextEditingController emailController = new TextEditingController();
   TextEditingController noHpController = new TextEditingController();
   TextEditingController namaController = new TextEditingController();
@@ -100,7 +99,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
     //
     try {
       var response = await http.get(
-          'https://apikompag.maxproitsolution.com/api/anggota/member/$memberId');
+          'https://maxproitsolution.com/apikompag/api/anggota/member/$memberId');
 // memberDetailFromJson(response.body);
       // print(response.body);
       // bl.close();
@@ -447,7 +446,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                         String memberId = await storage.read(key: 'memberId');
                         String token = await storage.read(key: 'token');
                         String url =
-                            'https://apikompag.maxproitsolution.com/api/anggota/self-update-member/$memberId';
+                            'https://maxproitsolution.com/apikompag/api/anggota/self-update-member/$memberId';
                         // String token = await storage.read(key: 'token');
                         Map<String, String> headers = {
                           "Content-Type": "application/json",
@@ -1257,11 +1256,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
                                 ),
                                 MyTextField(
-                                  formKey: _formKey5,
-                                  controller: noHpController,
-                                  hintText: 'No HP',
-                                  inputType: TextInputType.number
-                                ),
+                                    formKey: _formKey5,
+                                    controller: noHpController,
+                                    hintText: 'No HP',
+                                    inputType: TextInputType.number),
                                 SizedBox(
                                   height: 2,
                                 ),

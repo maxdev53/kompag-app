@@ -43,7 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _saving = true;
     });
     var url = Uri.parse(
-        'https://apikompag.maxproitsolution.com/api/anggota/registrasi/pertama');
+        'https://maxproitsolution.com/apikompag/api/anggota/registrasi/pertama');
 
     var response = await http.post(url, body: {
       'member_id': widget.id,
@@ -150,7 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<dynamic> registerMemberAkun(String name, String memberId) async {
     var url = Uri.parse(
-        'https://apikompag.maxproitsolution.com/api/anggota/registrasi/pertama');
+        'https://maxproitsolution.com/apikompag/api/anggota/registrasi/pertama');
 
     var response = await http.post(url, body: {
       'member_id': memberId,
@@ -170,7 +170,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _saving = true;
     });
     var url = Uri.parse(
-        'https://apikompag.maxproitsolution.com/api/anggota/self-store-member');
+        'https://maxproitsolution.com/apikompag/api/anggota/self-store-member');
     // String token = await storage.read(key: 'token');
     var phone3 = noHpRegisterController.text;
     var phone2 = phone3.substring(0, 2);
@@ -285,193 +285,189 @@ class _RegisterPageState extends State<RegisterPage> {
   bool passwordVisibility = true;
   @override
   Widget build(BuildContext context) {
-    return ModalProgressHUD(
-      inAsyncCall: _saving,
-      child: Scaffold(
-        // builder: EasyLoading.init(),
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Image(
-              width: 24,
-              color: Colors.black,
-              image: Svg('assets/images/back_arrow.svg'),
-            ),
+    return Scaffold(
+      // builder: EasyLoading.init(),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Image(
+            width: 24,
+            color: Colors.black,
+            image: Svg('assets/images/back_arrow.svg'),
           ),
         ),
-        body: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                  ),
-                  child: Column(
-                    children: [
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Pendaftaran akun",
-                              style: kHeadline,
-                            ),
-                            Text(
-                              "dapatkan kemudahan & informasi menarik.",
-                              style: kBodyText2,
-                            ),
-                            SizedBox(
-                              height: 50,
-                            ),
-                            MyTextField(
-                              formKey: _formKey,
-                              enableInput: widget.haveName ? false : true,
-                              hintText: 'Nama',
-                              controller: namaRegisterController,
-                              inputType: TextInputType.name,
-                            ),
-                            // SizedBox(
-                            //   height: 2.0,
-                            // ),
-                            // MyTextField(
-                            //   hintText: 'Email',
-                            //   controller: emailRegisterController,
-                            //   inputType: TextInputType.emailAddress,
-                            // ),
-                            MyTextField(
-                              formKey: _formKey1,
-
-                              // noHp: noHpRegisterController.text,
-                              hintText: 'No HP',
-                              controller: noHpRegisterController,
-                              inputType: TextInputType.phone,
-                            ),
-                            Text(
-                              "*Nomor harus diawali dengan angka 0",
-                              style: TextStyle(
-                                color: Colors.grey[350],
-                                fontSize: 14.0,
-                              ),
-                            ),
-
-                            widget.haveName
-                                ? Text('')
-                                : MyTextField(
-                                    formKey: _formKey2,
-
-                                    // noHp: noHpRegisterController.text,
-                                    hintText: 'Email',
-                                    controller: emailRegisterController,
-                                    inputType: TextInputType.emailAddress,
-                                  ),
-                            // MyPasswordField(
-                            //   isPasswordVisible: passwordVisibility,
-                            //   onTap: () {
-                            //     setState(() {
-                            //       passwordVisibility = !passwordVisibility;
-                            //     });
-                            //   },
-                            // )
-                          ],
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+      ),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Column(
+                  children: [
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Sudah punya akun? ",
-                            style: kBodyText,
+                            "Pendaftaran akun",
+                            style: kHeadline,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              namaRegisterController.clear();
-                              noHpRegisterController.clear();
-                              emailRegisterController.clear();
-                              Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => LoginScreen(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              'Masuk',
-                              style: kBodyText.copyWith(
-                                color: Colors.black,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 2.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              namaRegisterController.clear();
-                              noHpRegisterController.clear();
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      duration: Duration(milliseconds: 1000),
-                                      type: PageTransitionType.scale,
-                                      // alignment: Alignment.centerLeft,
-                                      child: WelcomePage(
-                                          // haveName: false,
-                                          )));
-                            },
-                            child: Text(
-                              'Halaman utama',
-                              style: kBodyText.copyWith(
-                                color: Colors.black,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(6.0),
-                        child: MyTextButton(
-                        borderColor: Colors.white,
+                          Text(
+                            "dapatkan kemudahan & informasi menarik.",
+                            style: kBodyText2,
+                          ),
+                          SizedBox(
+                            height: 50,
+                          ),
+                          MyTextField(
+                            formKey: _formKey,
+                            enableInput: widget.haveName ? false : true,
+                            hintText: 'Nama',
+                            controller: namaRegisterController,
+                            inputType: TextInputType.name,
+                          ),
+                          // SizedBox(
+                          //   height: 2.0,
+                          // ),
+                          // MyTextField(
+                          //   hintText: 'Email',
+                          //   controller: emailRegisterController,
+                          //   inputType: TextInputType.emailAddress,
+                          // ),
+                          MyTextField(
+                            formKey: _formKey1,
 
-                          buttonName:
-                              widget.haveName ? 'Registrasi pertama' : 'Daftar',
-                          onTap: () async {
-                            // print('tap daftar');
-                            if (widget.haveName) {
-                              if (_formKey1.currentState.validate()) {
-                                await registerAkun();
-                              }
-                            } else {
-                              if (_formKey.currentState.validate() &&
-                                  _formKey1.currentState.validate() &&
-                                  _formKey2.currentState.validate()) {
-                                await registerMember();
-                              }
-                            }
-                          },
-                          bgColor: Colors.black,
-                          textColor: Colors.white,
+                            // noHp: noHpRegisterController.text,
+                            hintText: 'No HP',
+                            controller: noHpRegisterController,
+                            inputType: TextInputType.phone,
+                          ),
+                          Text(
+                            "*Nomor harus diawali dengan angka 0",
+                            style: TextStyle(
+                              color: Colors.grey[350],
+                              fontSize: 14.0,
+                            ),
+                          ),
+
+                          widget.haveName
+                              ? Text('')
+                              : MyTextField(
+                                  formKey: _formKey2,
+
+                                  // noHp: noHpRegisterController.text,
+                                  hintText: 'Email',
+                                  controller: emailRegisterController,
+                                  inputType: TextInputType.emailAddress,
+                                ),
+                          // MyPasswordField(
+                          //   isPasswordVisible: passwordVisibility,
+                          //   onTap: () {
+                          //     setState(() {
+                          //       passwordVisibility = !passwordVisibility;
+                          //     });
+                          //   },
+                          // )
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Sudah punya akun? ",
+                          style: kBodyText,
                         ),
-                      )
-                    ],
-                  ),
+                        GestureDetector(
+                          onTap: () {
+                            namaRegisterController.clear();
+                            noHpRegisterController.clear();
+                            emailRegisterController.clear();
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Masuk',
+                            style: kBodyText.copyWith(
+                              color: Colors.black,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 2.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            namaRegisterController.clear();
+                            noHpRegisterController.clear();
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    duration: Duration(milliseconds: 1000),
+                                    type: PageTransitionType.scale,
+                                    // alignment: Alignment.centerLeft,
+                                    child: WelcomePage(
+                                        // haveName: false,
+                                        )));
+                          },
+                          child: Text(
+                            'Halaman utama',
+                            style: kBodyText.copyWith(
+                              color: Colors.black,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(6.0),
+                      child: MyTextButton(
+                        borderColor: Colors.white,
+                        buttonName:
+                            widget.haveName ? 'Registrasi pertama' : 'Daftar',
+                        onTap: () async {
+                          // print('tap daftar');
+                          if (widget.haveName) {
+                            if (_formKey1.currentState.validate()) {
+                              await registerAkun();
+                            }
+                          } else {
+                            if (_formKey.currentState.validate() &&
+                                _formKey1.currentState.validate() &&
+                                _formKey2.currentState.validate()) {
+                              await registerMember();
+                            }
+                          }
+                        },
+                        bgColor: Colors.black,
+                        textColor: Colors.white,
+                      ),
+                    )
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

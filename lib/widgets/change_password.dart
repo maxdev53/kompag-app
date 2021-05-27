@@ -41,16 +41,15 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
     return Scaffold(
       // backgroundColor: Palette.primaryColor,
       appBar: CustomAppBar(color: Palette.primaryColor),
-      body: ModalProgressHUD(
-        inAsyncCall: _saving,
-        child: CustomScrollView(
-          physics: ClampingScrollPhysics(),
-          slivers: <Widget>[
-            _buildHeader(screenHeight),
-            _buildChangePassword(screenHeight),
-          ],
-        ),
-      ),
+      body: _saving
+          ? Center(child: CircularProgressIndicator())
+          : CustomScrollView(
+              physics: ClampingScrollPhysics(),
+              slivers: <Widget>[
+                _buildHeader(screenHeight),
+                _buildChangePassword(screenHeight),
+              ],
+            ),
     );
   }
 
