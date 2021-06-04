@@ -17,7 +17,7 @@ Widget listWidget(Informasi item) {
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: NetworkImage(
-                        'https://maxproitsolution.com/apikompag/kompagapi/public/storage/' +
+                        'https://maxproitsolution.com/apikompag/api/public/storage/' +
                             item.gambarCover,
                       ),
                       fit: BoxFit.cover),

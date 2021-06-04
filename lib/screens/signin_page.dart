@@ -101,6 +101,7 @@ class _SignInPageState extends State<SignInPage> {
                             height: 60,
                           ),
                           MyTextField(
+                            withIcon: false,
                             formKey: GlobalKey<FormState>(),
 
                             controller: emailController,

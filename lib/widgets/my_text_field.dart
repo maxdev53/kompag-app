@@ -10,12 +10,16 @@ class MyTextField extends StatefulWidget {
     this.enableInput,
     @required this.inputType,
     @required this.formKey,
+    @required this.withIcon,
+    this.textIcon,
   }) : super(key: key);
   final String hintText;
   final TextInputType inputType;
   final TextEditingController controller;
   final bool enableInput;
   final formKey;
+  final IconButton textIcon;
+  final bool withIcon;
 
   // final String noHp;
 
@@ -25,9 +29,26 @@ class MyTextField extends StatefulWidget {
 
 class _MyTextFieldState extends State<MyTextField> {
   // final bool _validate = false;
+  bool _withIcon;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _withIcon = widget.withIcon;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var inputDecoration = InputDecoration(
+      filled: true,
+      suffixIcon: widget.withIcon
+          ? widget.textIcon
+          : Icon(
+              Icons.check,
+            ),
+      // suffix: ()=>,
+      fillColor: Colors.white,
       // errorText: validateData(widget.controller.text),
       // validator:
       // errorText: widget.noHp == null ? 'Tidak boleh kosong' : null,
@@ -56,6 +77,8 @@ class _MyTextFieldState extends State<MyTextField> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: TextFormField(
+          minLines: 1,
+          maxLines: 20,
           validator: (value) {
             Pattern pattern = '^([0]:?[82])?[0-9]{10,14}';
             // Pattern pattern = '/^([08])[0-9]{6,14}';

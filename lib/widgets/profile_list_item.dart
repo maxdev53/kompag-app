@@ -17,6 +17,8 @@ class ProfileListItem extends StatefulWidget {
   final String text;
   final String pageDescription;
   final bool hasNavigation;
+  final Function onTap;
+  // final Function addLike;
 
   const ProfileListItem({
     Key key,
@@ -24,6 +26,7 @@ class ProfileListItem extends StatefulWidget {
     this.text,
     this.hasNavigation = true,
     this.pageDescription = 'profile',
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -62,9 +65,12 @@ class _ProfileListItemState extends State<ProfileListItem> {
             );
             break;
           case 'exit':
+            this.widget.onTap(true);
+
             // Loader.show(context,progressIndicator:LinearProgressIndicator());
             var res = await Services.logOut().then((value) => {
-                  // Loader.hide()
+                  // Loader.hide
+                  this.widget.onTap(false)
                 });
             // print(res);
             // if (res) {
@@ -72,25 +78,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
             SharedPreferences preferences =
                 await SharedPreferences.getInstance();
             await preferences.clear();
-            new Future.delayed(new Duration(seconds: 2), () {
-              showToast('Akun anda berhasil keluar ',
-                  position: StyledToastPosition.top,
-                  context: context,
-                  duration: Duration(seconds: 4),
-                  animation: StyledToastAnimation.fade);
-              // setState(() {
-              //   _saving = false;
-              // });
-              Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => WelcomePage(
-                      // pageIndex: 1,
-                      // memberDetail: _memberDetail
-                      ),
-                ),
-              );
-            });
+          
             // } else {
             //   // setState(() {
             //   //   _saving = false;

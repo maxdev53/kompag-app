@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:colour/colour.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _statusForm = new GlobalKey<FormState>();
   SharedPref sharedPref = SharedPref();
   String _nama = '';
+  String _photo = '';
   // bool _loading = false;
   List<LatestStatus> _latestStatus;
   String _memberId;
@@ -69,9 +72,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<String> getDataLogin() async {
     String nama = await storage.read(key: 'nama');
     String memberId = await storage.read(key: 'memberId');
+    String photo = await storage.read(key: 'photo');
+    print(photo);
     setState(() {
       _nama = nama;
       _memberId = memberId;
+      _photo = photo;
     });
 
     return nama;
@@ -122,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Apa kamu yakin?'),
+              title: Text('Apakah yakin?'),
               content: Text('ingin keluar dari Aplikasi'),
               actions: <Widget>[
                 FlatButton(
@@ -239,6 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, index) {
+          // var contain = _latestStatus[index].likes.where((element) => element.anggota == _latestStatus[index].nama);
           // print(_latestStatus);
           return _loading
               ? Container(
@@ -254,9 +261,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.only(right: 10.0, left: 10.0),
                   child:
                       // FeedBoxWidget(avatarUrl: ,)
-                      FeedBoxWidget(
+                      FeedBoxWidget( 
+                    liked: _latestStatus[index].liked,
+                    ownStatus:
+                        _latestStatus[index].nama == _nama ? true : false,
                     listStatus: _latestStatus,
                     avatarUrl: avatarUrl[0],
+                    userPhoto: _latestStatus[index].userPhoto,
+                    photo: _latestStatus[index].photo == null
+                        ? 'kosong'
+                        : _latestStatus[index].photo,
+                    // liked: contain.isEmpty ? false : true,
                     userName: _latestStatus[index].nama,
                     date: _latestStatus[index].waktu,
                     contentText: _latestStatus[index].status,
@@ -322,18 +337,26 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             // color: Colors.transparent,
             // padding: EdgeInsets.all(20.0),
+            height: 72.0,
             width: double.infinity,
             decoration: BoxDecoration(
                 color: Colour("#F7F9F9"),
-                borderRadius: BorderRadius.circular(22.0)),
+                borderRadius: BorderRadius.circular(16.0)),
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+                  const EdgeInsets.symmetric(horizontal: 6.0, vertical: 8.0),
               child: Row(
                 children: [
                   CircleAvatar(
-                    radius: 25.0,
-                    backgroundImage: AssetImage("assets/images/man.png"),
+                    radius: 32.0,
+                    backgroundImage: _photo != ''
+                        ? NetworkImage(
+                            'https://maxproitsolution.com/apikompag/api/public/storage/' +
+                                _photo,
+                          )
+                        : AssetImage(
+                            'assets/images/man.png',
+                          ),
                   ),
                   SizedBox(
                     width: 10.0,
@@ -352,20 +375,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                       child: Container(
+                          margin: EdgeInsets.only(left: 8.0),
                           // height: 200.0,
                           // width: double.infinity,
                           child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Apa yanga anda pikirkan ?"),
-                          Container(
-                            margin: EdgeInsets.only(right: 18.0),
-                            child: Icon(
-                              Icons.share,
-                            ),
-                          )
-                        ],
-                      )),
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Apa yanga anda pikirkan ?",
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 16.0),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(right: 18.0),
+                                child: Icon(
+                                  Icons.share,
+                                ),
+                              )
+                            ],
+                          )),
                     ),
                   )
                 ],

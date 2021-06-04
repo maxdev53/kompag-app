@@ -79,6 +79,7 @@ class _RegisterAkunState extends State<RegisterAkun> {
                             height: 50,
                           ),
                           MyTextField(
+                             withIcon: false,
                             formKey: GlobalKey<FormState>(),
                             enableInput: false,
                             hintText: 'Nama',
@@ -91,6 +92,7 @@ class _RegisterAkunState extends State<RegisterAkun> {
                           //   inputType: TextInputType.emailAddress,
                           // ),
                           MyTextField(
+                             withIcon: false,
                             formKey: GlobalKey<FormState>(),
                             hintText: 'No HP',
                             enableInput: false,

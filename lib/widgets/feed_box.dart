@@ -3,14 +3,12 @@ import 'package:flutter_login_register_ui/config/palette.dart';
 import 'package:flutter_login_register_ui/helpers/storage.dart';
 import 'package:flutter_login_register_ui/models/latest_status.dart';
 import 'package:flutter_login_register_ui/screens/dashboard/bottom_nav_screen.dart';
-import 'package:flutter_login_register_ui/screens/dashboard/home_screen.dart';
 import 'package:flutter_login_register_ui/widgets/action_btn.dart';
 import 'package:flutter_login_register_ui/widgets/sub_action_btn.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
 import 'package:pop_bottom_menu/pop_bottom_menu.dart';
-import 'package:http/http.dart' as http;
 
 //the feed box will have for parameters :
 // the user name , the user avatar, the pub date, the content text and content img
@@ -18,6 +16,8 @@ class FeedBoxWidget extends StatefulWidget {
   const FeedBoxWidget(
       {Key key,
       this.avatarUrl,
+      this.photo,
+      this.userPhoto,
       this.userName,
       this.date,
       this.contentText,
@@ -25,16 +25,22 @@ class FeedBoxWidget extends StatefulWidget {
       this.like,
       this.comment,
       this.id,
-      this.listStatus})
+      this.listStatus,
+      this.ownStatus,
+      @required this.liked})
       : super(key: key);
   final String avatarUrl;
   final List<LatestStatus> listStatus;
-
+  final bool ownStatus;
   final String userName;
   final String date;
+  final String photo;
+  final String userPhoto;
+  final bool liked;
   final String contentText;
   final String contentImg;
   final int like;
+  // final bool liked;
   final int id;
   final int comment;
 
@@ -47,9 +53,26 @@ class _FeedBoxWidgetState extends State<FeedBoxWidget> {
 
   // }
   bool _saving = false;
+  String _name;
+  String _nameOwnStatus;
+  int _jumlahLike;
+  bool _liked = true;
+
+  Future<String> getName() async {
+    String name = await getStorageData('nama');
+    setState(() {
+      _name = name;
+    });
+    return name;
+  }
+
   @override
   void initState() {
     super.initState();
+    setState(() {
+      _nameOwnStatus = widget.userName;
+      _jumlahLike = widget.like;
+    });
   }
 
   @override
@@ -125,14 +148,14 @@ class _FeedBoxWidgetState extends State<FeedBoxWidget> {
                   color: Colors.red,
                 ),
               ),
-              // ItemPopBottomMenu(
-              //   onPressed: () => print("mute"),
-              //   label: "Mute",
-              //   icon: Icon(
-              //     Icons.navigate_next,
-              //     color: Colors.grey,
-              //   ),
-              // ),
+              ItemPopBottomMenu(
+                // onPressed: () => print("mute"),
+                label: "",
+                // icon: Icon(
+                //   Icons.linear_scale_sharp,
+                //   color: Colors.grey,
+                // ),
+              ),
               // ItemPopBottomMenu(
               //   onPressed: () => print("unfollow"),
               //   label: "Unfollow",
@@ -143,6 +166,14 @@ class _FeedBoxWidgetState extends State<FeedBoxWidget> {
       );
     }
 
+    var userNametxt = Text(
+      widget.userName,
+      style: TextStyle(
+        color: Colors.black,
+        fontSize: 18.0,
+        fontWeight: FontWeight.w600,
+      ),
+    );
     return _saving
         ? Center(child: CircularProgressIndicator())
         : Container(
@@ -163,7 +194,11 @@ class _FeedBoxWidgetState extends State<FeedBoxWidget> {
                   child: Row(
                     children: [
                       CircleAvatar(
-                        backgroundImage: NetworkImage(widget.avatarUrl),
+                        backgroundImage: widget.userPhoto != ""
+                            ? NetworkImage(
+                                'https://maxproitsolution.com/apikompag/api/public/storage/' +
+                                    widget.userPhoto)
+                            : AssetImage("assets/images/man.png"),
                         radius: 25.0,
                       ),
                       SizedBox(
@@ -174,14 +209,7 @@ class _FeedBoxWidgetState extends State<FeedBoxWidget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              widget.userName,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                            userNametxt,
                             SizedBox(
                               height: 5.0,
                             ),
@@ -198,11 +226,13 @@ class _FeedBoxWidgetState extends State<FeedBoxWidget> {
                       ),
 
                       // mainAxisAlignment: MainAxisAlignment.end,
-                      InkWell(
-                        onTap: () => {_showBottomMenu()},
-                        child: Icon(Icons.more_vert_rounded,
-                            size: 24.0, color: Colors.grey[900]),
-                      ),
+                      !widget.ownStatus
+                          ? Text('')
+                          : InkWell(
+                              onTap: () => {_showBottomMenu()},
+                              child: Icon(Icons.more_vert_rounded,
+                                  size: 24.0, color: Colors.grey[900]),
+                            ),
                     ],
                   ),
                 ),
@@ -220,17 +250,51 @@ class _FeedBoxWidgetState extends State<FeedBoxWidget> {
                       ),
                     ),
                   ),
-                // SizedBox(
-                //   height: 4.0,
-                // ),
-                if (widget.contentImg != "") Image.network(widget.contentImg),
+                SizedBox(
+                  height: 8.0,
+                ),
+                if (widget.photo != "kosong")
+                  Container(
+                    padding: EdgeInsets.only(left: 4.0, right: 4.0),
+                    child: Image.network(
+                        'https://maxproitsolution.com/apikompag/api/public/storage/' +
+                            widget.photo),
+                  ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    subActionButton(
-                        Icons.thumb_up, "${widget.like}", Colors.blue, 14.0),
-                    subActionButton(Icons.comment, "${widget.comment} komentar",
-                        Colors.grey, 14.0),
+                    // subActionButton(
+                    //     Icons.thumb_up, "${widget.like}", Colors.blue, 14.0),
+                    // subActionButton(Icons.comment, "${widget.comment} komentar",
+                    //     Colors.grey, 14.0),
+                    FlatButton.icon(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.thumb_up,
+                        color: Colors.blue,
+                        size: 14.0,
+                      ),
+                      label: Text(
+                        "$_jumlahLike",
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    FlatButton.icon(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.comment,
+                        color: Colors.grey,
+                        size: 14.0,
+                      ),
+                      label: Text(
+                        "${widget.comment} komentar",
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
 
@@ -248,10 +312,48 @@ class _FeedBoxWidgetState extends State<FeedBoxWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    actionButton(Icons.thumb_up, "Like", Color(0xFF505050)),
-                    actionButton(Icons.comment, "Reply", Color(0xFF505050)),
-                    actionButton(Icons.record_voice_over_outlined, "Share",
-                        Color(0xFF505050)),
+                    // actionButton(Icons.thumb_up, "Like", Color(0xFF505050)),
+                    // actionButton(Icons.comment, "Reply", Color(0xFF505050)),
+                    // actionButton(Icons.record_voice_over_outlined, "Share",
+                    //     Color(0xFF505050)),
+                    ActionButtonWidget(
+                        liked: widget.liked,
+                        addLike: () {
+                          setState(() {
+                            // _liked ? _jumlahLike-- : _jumlahLike++;
+                            (widget.liked && _liked)
+                                ? _jumlahLike--
+                                : (widget.liked && !_liked)
+                                    ? _jumlahLike++
+                                    : (!widget.liked && !_liked)
+                                        ? _jumlahLike--
+                                        : _jumlahLike++;
+
+                            _liked = !_liked;
+                            print(_liked);
+                            // widget.liked = a;
+                          });
+                        },
+                        statusID: widget.id,
+                        icon: Icons.thumb_up,
+                        actionTitle: "Like",
+                        iconColor: (widget.liked && _liked)
+                            ? Colors.blue
+                            : (widget.liked && !_liked)
+                                ? Color(0xFF505050)
+                                : (!widget.liked && _liked)
+                                    ? Color(0xFF505050)
+                                    : Colors.blue),
+                    ActionButtonWidget(
+                        statusID: widget.id,
+                        icon: Icons.comment,
+                        actionTitle: "Reply",
+                        iconColor: Color(0xFF505050)),
+                    ActionButtonWidget(
+                        statusID: widget.id,
+                        icon: Icons.link,
+                        actionTitle: "Share",
+                        iconColor: Color(0xFF505050)),
                   ],
                 ),
                 Divider(
@@ -262,133 +364,4 @@ class _FeedBoxWidgetState extends State<FeedBoxWidget> {
             ),
           );
   }
-}
-
-Widget feedBox(
-  String avatarUrl,
-  String userName,
-  String date,
-  String contentText,
-  String contentImg,
-  int like,
-  int comment,
-) {
-  return Container(
-    margin: EdgeInsets.only(bottom: 20.0),
-    width: double.infinity,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12.0),
-      color: Palette.secondaryColor,
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      // mainAxisAlignment: MainAxisAlignment.start,
-      // crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(avatarUrl),
-                radius: 25.0,
-              ),
-              SizedBox(
-                width: 10.0,
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      userName,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    Text(
-                      date,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // mainAxisAlignment: MainAxisAlignment.end,
-              InkWell(
-                onTap: () => {},
-                child: Icon(
-                  Icons.more_vert_rounded,
-                  size: 24.0,
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 16.0,
-        ),
-        if (contentText != "")
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-            child: Container(
-              margin: EdgeInsets.only(left: 4.0),
-              child: Text(
-                contentText,
-                style: TextStyle(color: Colors.black, fontSize: 16.0),
-              ),
-            ),
-          ),
-        // SizedBox(
-        //   height: 4.0,
-        // ),
-        if (contentImg != "") Image.network(contentImg),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            subActionButton(Icons.thumb_up, "$like", Colors.blue, 14.0),
-            subActionButton(
-                Icons.comment, "$comment komentar", Colors.grey, 14.0),
-          ],
-        ),
-
-        Divider(
-          height: 0.2,
-          thickness: 0.5,
-          color: Color(0xFF505050),
-        ),
-        // Row(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        // children: [
-        // ],
-        // ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            actionButton(Icons.thumb_up, "Like", Color(0xFF505050)),
-            actionButton(Icons.comment, "Reply", Color(0xFF505050)),
-            actionButton(
-                Icons.record_voice_over_outlined, "Share", Color(0xFF505050)),
-          ],
-        ),
-        Divider(
-          thickness: 0.5,
-          color: Color(0xFF505050),
-        ),
-      ],
-    ),
-  );
 }

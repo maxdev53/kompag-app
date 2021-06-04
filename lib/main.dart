@@ -1,27 +1,28 @@
 import 'dart:io';
 
-import 'package:colour/colour.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login_register_ui/config/palette.dart';
-// import 'package:flutter_login_register_ui/config/palette.dart';
 import 'package:flutter_login_register_ui/helpers/storage.dart';
 import 'package:flutter_login_register_ui/router.dart';
+import 'package:flutter_login_register_ui/screens/dashboard/main.dart';
+import 'package:flutter_login_register_ui/services/storage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
-// import 'package:new_version/new_version.dart';
-import 'package:in_app_update/in_app_update.dart';
-// import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:splash_screen_view/SplashScreenView.dart';
-// import 'constants.dart';
-import './screens/screen.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:in_app_update/in_app_update.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:splash_screen_view/SplashScreenView.dart';
 
-import 'package:flutter_login_register_ui/screens/dashboard/main.dart';
+import './screens/screen.dart';
 
 const URI = 'https://maxproitsolution.com/apikompag/api';
 final storage = FlutterSecureStorage();
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  OneSignal.shared
+      .init("2ab82d0b-62a8-4236-a060-15c234ee6562", iOSSettings: null);
+  OneSignal.shared
+      .setInFocusDisplayType(OSNotificationDisplayType.notification);
   HttpOverrides.global = new MyHttpOverrides();
   runApp(MyApp());
 }
@@ -35,22 +36,6 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       title: 'Kompag',
-//       theme: ThemeData(
-//         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-//         scaffoldBackgroundColor: kBackgroundColor,
-//         primarySwatch: Colors.blue,
-//         visualDensity: VisualDensity.adaptivePlatformDensity,
-//       ),
-//       home: WelcomePage(),
-//     );
-//   }
-// }
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
   @override
@@ -106,7 +91,7 @@ class _MyAppState extends State<MyApp> {
     };
 
     var response = await http.post(
-      url,
+     Uri.parse(url),
       headers: headers,
     );
     setState(() {
@@ -117,11 +102,45 @@ class _MyAppState extends State<MyApp> {
     return response.body;
   }
 
+  String title = 'Kompag PPRMB';
+  String content = "konten";
+  String oneSignalUserId;
+
+  Future<OSPermissionSubscriptionState> _getUserId() async {
+    OSPermissionSubscriptionState status =
+        await OneSignal.shared.getPermissionSubscriptionState();
+    setState(() {
+      oneSignalUserId = status.subscriptionStatus.userId;
+      // print(oneSignalUserId);
+    });
+    MyAppStorage()
+        .writeData("oneSignalUserId", status.subscriptionStatus.userId);
+  }
+
+// status.getPermissionStatus().getEnabled();
+
+// status.getSubscriptionStatus().getSubscribed();
+// status.getSubscriptionStatus().getUserSubscriptionSetting();
+// _status.getSubscriptionStatus();
+// status.getSubscriptionStatus().getPushToken();
+
   @override
   void initState() {
     _pageLoad = true;
     getToken().then((token) => {checkValidToken(token)});
     super.initState();
+    _getUserId();
+    OneSignal.shared
+        .setNotificationReceivedHandler((OSNotification notification) {
+      // will be called whenever a notification is received
+      title = notification.payload.title;
+      content = notification.payload.body;
+    });
+
+    OneSignal.shared
+        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+      // will be called whenever a notification is opened/button pressed.
+    });
     checkForUpdate();
   }
 
@@ -134,7 +153,7 @@ class _MyAppState extends State<MyApp> {
       title: 'kompag PPRMB',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+        // textTheme:,
         scaffoldBackgroundColor: Colors.white,
         // primarySwatch: Colour("#D8C8C5"),
         visualDensity: VisualDensity.adaptivePlatformDensity,

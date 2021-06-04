@@ -328,6 +328,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             height: 50,
                           ),
                           MyTextField(
+                             withIcon: false,
                             formKey: _formKey,
                             enableInput: widget.haveName ? false : true,
                             hintText: 'Nama',
@@ -343,6 +344,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           //   inputType: TextInputType.emailAddress,
                           // ),
                           MyTextField(
+                             withIcon: false,
                             formKey: _formKey1,
 
                             // noHp: noHpRegisterController.text,
@@ -361,6 +363,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           widget.haveName
                               ? Text('')
                               : MyTextField(
+                                 withIcon: false,
                                   formKey: _formKey2,
 
                                   // noHp: noHpRegisterController.text,

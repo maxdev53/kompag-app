@@ -1,18 +1,16 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
-import 'package:bottom_loader/bottom_loader.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_register_ui/Models/member.dart';
 import 'package:flutter_login_register_ui/Models/services.dart';
 import 'package:flutter_login_register_ui/screens/list_user.dart';
+import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
+
 import '../constants.dart';
 import '../screens/screen.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import '../widgets/widget.dart';
 
 class CekDataPage extends StatefulWidget {
@@ -125,6 +123,7 @@ class _CekDataPageState extends State<CekDataPage> {
                                 height: 68,
                               ),
                               MyTextField(
+                                withIcon: false,
                                 formKey: _formKey,
                                 hintText: 'Nama',
                                 controller: namaController,

@@ -38,7 +38,7 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
                   Hero(
                     tag: 'tagImage${widget.informasi}.kategori',
                     child: Image.network(
-                      'https://apikompag.maxproitsolution.com/kompagapi/public/storage/' +
+                      'https://maxproitsolution.com/apikompag/api/public/storage/' +
                           widget.informasi.gambarCover,
                     ),
                   ),

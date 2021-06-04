@@ -149,10 +149,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   var nama = body['data']['name'];
                                   var memberId = body['data']['member_id'];
                                   var noHp = body['data']['no_hp'];
+                                  var photo = body['data']['photo'];
                                   // print(memberId);
                                   storage.write(key: 'token', value: token);
                                   storage.write(key: 'nama', value: nama);
                                   storage.write(key: 'no_hp', value: noHp);
+                                  storage.write(key: 'photo', value: photo);
                                   storage.write(
                                       key: 'memberId', value: memberId);
 

@@ -99,7 +99,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
     //
     try {
       var response = await http.get(
-          'https://maxproitsolution.com/apikompag/api/anggota/member/$memberId');
+          Uri.parse('https://maxproitsolution.com/apikompag/api/anggota/member/$memberId'));
 // memberDetailFromJson(response.body);
       // print(response.body);
       // bl.close();
@@ -455,7 +455,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                         };
 
                         //  String json =
-                        var response = await http.put(url,
+                        var response = await http.put(Uri.parse(url),
                             headers: headers,
                             body: jsonEncode({
                               'nama': nama,
@@ -524,6 +524,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
                                 ),
                                 MyTextField(
+                                  withIcon: false,
                                   formKey: _formKey,
                                   controller: namaController,
                                   hintText: 'Nama',
@@ -874,12 +875,14 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
 
                                   MyTextField(
+                                     withIcon: false,
                                     formKey: _formKey1,
                                     controller: tempatLahirController,
                                     hintText: 'Tempat lahir',
                                     inputType: TextInputType.text,
                                   ),
                                   MyTextField(
+                                     withIcon: false,
                                     formKey: _formKey2,
                                     enableInput: false,
                                     controller: tglLahirController,
@@ -1103,6 +1106,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                           MainAxisAlignment.start,
                                       children: <Widget>[
                                         MyTextField(
+                                           withIcon: false,
                                           formKey: _formKey3,
                                           controller: noKkController,
                                           hintText: 'Nomer KK',
@@ -1126,6 +1130,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                           ),
                                         ),
                                         MyTextField(
+                                           withIcon: false,
                                           formKey: _formKey4,
                                           controller: noKtpController,
                                           hintText: 'Nomer KTP',
@@ -1256,6 +1261,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
                                 ),
                                 MyTextField(
+                                   withIcon: false,
                                     formKey: _formKey5,
                                     controller: noHpController,
                                     hintText: 'No HP',
@@ -1277,6 +1283,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
                                 ),
                                 MyTextField(
+                                   withIcon: false,
                                   formKey: _formKey6,
                                   controller: emailController,
                                   hintText: 'Email',

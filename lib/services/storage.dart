@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class MyStorage {
+class MyAppStorage {
   final _storage = FlutterSecureStorage();
 
   Future writeData(String key, String value) async {
@@ -11,5 +11,10 @@ class MyStorage {
   Future<String> readData(String key) async {
     var readData = await _storage.read(key: key);
     return readData;
+  }
+
+   Future deleteData(String key) async {
+    var deleteData = await _storage.delete(key: key);
+    return deleteData;
   }
 }
